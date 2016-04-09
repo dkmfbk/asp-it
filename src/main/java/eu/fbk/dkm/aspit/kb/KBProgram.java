@@ -266,7 +266,9 @@ public class KBProgram {
 				System.err.println("[!] No models for KB program.");
 			
 		} catch (DLVInvocationException | IOException e) {
+			System.err.println("[!] Cannot execute DLV invocation. Check if DLV executable file exists at path: " + dlvPath + "\n");
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 	

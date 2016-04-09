@@ -38,11 +38,6 @@ Options:
  - Java runtime version 1.7 (or greater)
  - Windows, Linux or Mac OS X operating system 
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-= DEMO =
-
-Please refer to "/demo/DEMO_README.txt" for usage examples.
-
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 = KNOWN LIMITATIONS =
 

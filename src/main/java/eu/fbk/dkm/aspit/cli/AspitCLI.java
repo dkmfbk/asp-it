@@ -2,6 +2,7 @@ package eu.fbk.dkm.aspit.cli;
 
 import it.unical.mat.wrapper.DLVInvocationException;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.semanticweb.drew.dlprogram.parser.ParseException;
@@ -54,6 +55,13 @@ public class AspitCLI {
 			printUsage();
 			System.exit(1);
 		}
+				
+		//Check input file existence
+		File ontofile = new File(inputKB.getOntologyFilename());
+		if(!ontofile.exists()){
+			System.err.println("[!] Input ontology file does not exists.");
+			System.exit(1);
+		}
 		
 		//Load ontology file.
 		try {
@@ -65,10 +73,12 @@ public class AspitCLI {
 		
 		//Create new program for the input KB.
 		outputKBProgram = new KBProgram(inputKB);
-		
+				
 		//Set possibly custom DLV, output file path and lp program
 		if(dlvPath != null) 
 			outputKBProgram.setDlvPath(dlvPath);
+		else 
+			dlvPath = outputKBProgram.getDlvPath();
 		if(outputKBFilePath != null) 
 			inputKB.setOutputFilePath(outputKBFilePath);
 		else 
@@ -107,7 +117,7 @@ public class AspitCLI {
 		}
 		if(verbose) System.out.println("Output KB saved to: " + inputKB.getOutputFilePath() + "\n");
 		
-		System.out.println("Asp-it: process complete.");
+		System.out.println("Asp-it: process completed.");
 	}
 	
 	/**
@@ -137,7 +147,7 @@ public class AspitCLI {
 	public boolean parseArgs(String[] args) {
 		
 		if (args.length == 0) {			
-			System.err.println("Missing argument: <input-ontology-file>");
+			System.err.println("[!] Missing argument: <input-ontology-file>");
 			System.err.println();			
 			return false;
 		} else {
@@ -180,9 +190,9 @@ public class AspitCLI {
 				+ //
 				" <input-ontology-file>\n"
 				+ //
-				"  OWL file containing the ontology for which IT have to be computed. \n"
+				"  OWL file containing the ontology for which IT have to be computed.\n\n"
 				+ //
-				"Example: aspit input.n3\n"
+				"Example: asp-it input.n3\n\n"
 				+ //
 				"Options:\n"
 				+ //
