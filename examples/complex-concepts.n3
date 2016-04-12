@@ -1,0 +1,44 @@
+#=============================================================================
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix elc:    <http://dkm.fbk.eu/asp-it/elc-schema#> .
+@prefix :       <http://dkm.fbk.eu/asp-it/complex-concepts#> .
+@base           <http://dkm.fbk.eu/asp-it/complex-concepts#> .
+#=============================================================================
+
+   #-------------------------------------------------------------------------
+
+    <http://dkm.fbk.eu/asp-it/complex-concepts#> a owl:Ontology ;                         
+                 owl:imports <http://dkm.fbk.eu/asp-it/elc-schema#> .
+
+   #-------------------------------------------------------------------------
+    # TBox axioms #
+    
+    :A a owl:Class .
+    :B a owl:Class .
+    :C a owl:Class .
+    
+    :R a owl:ObjectProperty .
+        
+    #-------------------------------------------------------------------------
+    # ABox axioms #
+    
+    :i1 a :A .
+    :i2 a :B .
+    :i3 a :C .
+    
+    :i1 :R :i2 .
+    
+    :i4 a [ a owl:Class;
+            owl:intersectionOf ( :A :B ) ].
+    
+    :i5 a [ a owl:Restriction ;
+            owl:onProperty :R ;
+            owl:someValuesFrom :A ] .
+    :i5 :R :i1 .            
+          
+    :i6 a owl:Thing .
+
+#=============================================================================

@@ -31,7 +31,7 @@ import eu.fbk.dkm.aspit.rewriter.PoIDatalogRewriter;
 
 /**
  * @author Loris
- * @version 0.1
+ * @version 1.0
  * 
  * Represents the program generated in the DLP translation. 
  * Contains methods to compute and store the program. 
@@ -40,6 +40,7 @@ public class KBProgram {
 	
 	//--- FIELDS ---------------------------------------------
 	
+	//TODO: move this to CLI
 	private static final String DEFAULT_DLV_PATH = "./localdlv/dlv";
 	private static final String DEFAULT_OUTPUT_FILENAME = "./output.dlv";
 	
@@ -47,6 +48,7 @@ public class KBProgram {
 	private OWLOntologyManager manager;
 	
 	private DLProgram datalogProgram;
+	private String additionalRules = "";
 	
 	private String outputFilePath; //Path to the output datalog file
 	private String dlvPath; 	   //Path to DLV solver location
@@ -57,7 +59,7 @@ public class KBProgram {
 	//--- CONSTRUCTOR ------------------------------------------
 
 	/**
-	 * @param inputKB the CKR (in normal form) to be rewritten
+	 * @param inputKB the knowledge base to be rewritten
 	 */
 	public KBProgram(KnowledgeBase inputKB) {
 		this.inputKB = inputKB;
@@ -121,7 +123,7 @@ public class KBProgram {
 	public void setDlvPath(String dlvPath) {
 		this.dlvPath = dlvPath;
 	}
-
+	
 	//--- REWRITING ---------------------------------------------
 	
 	/**
@@ -135,7 +137,10 @@ public class KBProgram {
 		PoIDatalogRewriter rewriter = new PoIDatalogRewriter();
 		rewriter.setKnowledgeBase(inputKB);
 		
+		//XXX: ############################
+		
 		datalogProgram = rewriter.rewrite();
+		additionalRules = rewriter.getAdditionalRules();
 		//System.out.println("Rewriting program complete.");
 		
 		//TODO: separate this from rewrite()
@@ -191,7 +196,7 @@ public class KBProgram {
 			storer.store(datalogKB, target);
             
 			//Add to DLV input program the contents of KBprogram. 
-			String datalogKBText = target.toString();
+			String datalogKBText = target.toString() + additionalRules;
 			inputProgram.addText(datalogKBText);
 			
 			//Set input program for current invocation.
@@ -201,6 +206,7 @@ public class KBProgram {
 			//List<String> filters = new LinkedList<String>();
 			//filters.add("inst");
 			//invocation.setFilter(filters, true);
+			invocation.addOption("-nofinitecheck");
 			
 			//List of computed models, used to check at least a model is computed.
 			final List<Model> models = new ArrayList<Model>();
@@ -289,6 +295,7 @@ public class KBProgram {
 		
 		FileWriter writer = new FileWriter(outputFilePath);
 		storer.store(datalogProgram, writer);
+		writer.write(additionalRules);
 		//writer.flush();
 		writer.close();
 		

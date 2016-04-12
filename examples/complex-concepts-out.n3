@@ -1,0 +1,195 @@
+@prefix : <http://dkm.fbk.eu/asp-it/complex-concepts##> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://dkm.fbk.eu/asp-it/complex-concepts#> .
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#> rdf:type owl:Ontology ;
+                                             
+                                             owl:imports <http://dkm.fbk.eu/asp-it/elc-schema#> .
+
+
+#################################################################
+#
+#    Annotation properties
+#
+#################################################################
+
+
+<http://dkm.fbk.eu/asp-it/elc-schema#hasIT> rdf:type owl:AnnotationProperty .
+
+
+
+
+
+#################################################################
+#
+#    Datatypes
+#
+#################################################################
+
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#R
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#R> rdf:type owl:ObjectProperty .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#A
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#A> rdf:type owl:Class .
+
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#B
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#B> rdf:type owl:Class .
+
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#C
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#C> rdf:type owl:Class .
+
+
+
+###  http://dkm.fbk.eu/asp-it/elc-schema#Generator
+
+<http://dkm.fbk.eu/asp-it/elc-schema#Generator> rdf:type owl:Class .
+
+
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#i1
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#i1> rdf:type <http://dkm.fbk.eu/asp-it/complex-concepts#A> ,
+                                                        owl:NamedIndividual ;
+                                               
+                                               <http://dkm.fbk.eu/asp-it/complex-concepts#R> <http://dkm.fbk.eu/asp-it/complex-concepts#i2> .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedProperty <http://dkm.fbk.eu/asp-it/complex-concepts#R> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i1> ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#i2>
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#A> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i1> ;
+  owl:annotatedProperty rdf:type
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#i2
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#i2> rdf:type <http://dkm.fbk.eu/asp-it/complex-concepts#B> ,
+                                                        owl:NamedIndividual .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#B> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i2> ;
+  owl:annotatedProperty rdf:type
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#i3
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#i3> rdf:type <http://dkm.fbk.eu/asp-it/complex-concepts#C> ,
+                                                        owl:NamedIndividual .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#C> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i3> ;
+  owl:annotatedProperty rdf:type
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#i4
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#i4> rdf:type owl:NamedIndividual ,
+                                                        [ rdf:type owl:Class ;
+                                                          owl:intersectionOf ( <http://dkm.fbk.eu/asp-it/complex-concepts#A>
+                                                                               <http://dkm.fbk.eu/asp-it/complex-concepts#B>
+                                                                             )
+                                                        ] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[tt, tt]"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i4> ;
+  owl:annotatedProperty rdf:type ;
+  owl:annotatedTarget [ rdf:type owl:Class ;
+                        owl:intersectionOf ( <http://dkm.fbk.eu/asp-it/complex-concepts#A>
+                                             <http://dkm.fbk.eu/asp-it/complex-concepts#B>
+                                           )
+                      ]
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#i5
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#i5> rdf:type owl:NamedIndividual ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://dkm.fbk.eu/asp-it/complex-concepts#R> ;
+                                                          owl:someValuesFrom <http://dkm.fbk.eu/asp-it/complex-concepts#A>
+                                                        ] ;
+                                               
+                                               <http://dkm.fbk.eu/asp-it/complex-concepts#R> <http://dkm.fbk.eu/asp-it/complex-concepts#i1> .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedProperty <http://dkm.fbk.eu/asp-it/complex-concepts#R> ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#i1> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i5>
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"i1\", tt]"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i5> ;
+  owl:annotatedProperty rdf:type ;
+  owl:annotatedTarget [ rdf:type owl:Restriction ;
+                        owl:onProperty <http://dkm.fbk.eu/asp-it/complex-concepts#R> ;
+                        owl:someValuesFrom <http://dkm.fbk.eu/asp-it/complex-concepts#A>
+                      ]
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/complex-concepts#i6
+
+<http://dkm.fbk.eu/asp-it/complex-concepts#i6> rdf:type owl:NamedIndividual ,
+                                                        owl:Thing .
+
+
+
+
+###  Generated by the OWL API (version [Not Released]) http://owlapi.sourceforge.net
+

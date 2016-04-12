@@ -14,7 +14,7 @@ import eu.fbk.dkm.aspit.kb.KnowledgeBase;
 
 /** 
  * @author Loris 
- * @version 0.1
+ * @version 1.0
  * 
  * Command line interface for Asp-it (for ELc).
  */
@@ -55,7 +55,8 @@ public class AspitCLI {
 			printUsage();
 			System.exit(1);
 		}
-				
+		
+		//TODO: move controls of ontology and schema file existence in loadOntology
 		//Check input file existence
 		File ontofile = new File(inputKB.getOntologyFilename());
 		if(!ontofile.exists()){
@@ -74,15 +75,17 @@ public class AspitCLI {
 		//Create new program for the input KB.
 		outputKBProgram = new KBProgram(inputKB);
 				
+		//XXX: ############################
+		
 		//Set possibly custom DLV, output file path and lp program
 		if(dlvPath != null) 
 			outputKBProgram.setDlvPath(dlvPath);
-		else 
-			dlvPath = outputKBProgram.getDlvPath();
+
 		if(outputKBFilePath != null) 
 			inputKB.setOutputFilePath(outputKBFilePath);
 		else 
 			inputKB.setOutputFilePath(formatFilename());
+
 		if(outputDLPFilePath != null)
 			outputKBProgram.setOutputFilePath(outputDLPFilePath);
 		
@@ -211,7 +214,7 @@ public class AspitCLI {
 	 * Prints initial banner and version.
 	 */
 	void printBanner(){
-		String banner = "=== Asp-it v.0.1 (ELc) ===\n";
+		String banner = "=== Asp-it v.1.0 (ELc) ===\n";
 		System.out.println(banner);
 	}
 	
@@ -226,12 +229,13 @@ public class AspitCLI {
 	public static void main(String[] args) throws OWLOntologyCreationException,
 			IOException, ParseException, DLVInvocationException {
 		
-        new AspitCLI(args).go();
+        //new AspitCLI(args).go();
 		
         //(Test application)
 		//String[] argtest = {"./examples/just-atomic.n3", "-v", "-lp", "./output.dlv"};
+		String[] argtest = {"./examples/complex-concepts.n3", "-v", "-lp", "./output.dlv"};
 						
-		//new AspitCLI(argtest).go();
+		new AspitCLI(argtest).go();
 	}
 	
 }

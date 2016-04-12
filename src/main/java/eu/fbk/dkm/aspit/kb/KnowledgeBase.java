@@ -20,7 +20,7 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 /**
  * @author Loris
- * @version 0.1
+ * @version 1.0
  * 
  * Represents the working ontology for which information terms are computed. 
  */
@@ -34,7 +34,6 @@ public class KnowledgeBase {
 	private String outputFilePath;
 
 	private String kbFilename;
-//	private String kbName;	
 	private File kbFile;
 	private OWLOntology kbOWLOntology;
 	
@@ -71,11 +70,6 @@ public class KnowledgeBase {
 	public Set<PieceOfInformation> getPOIs() {
 		return POIs;
 	}
-
-//	public CKRModule getLocalModule(String string) {
-//	// TODO Auto-generated method stub
-//	return null;
-//}
 	
 	//--- SET METHODS ---------------------------------------------
 	
@@ -109,6 +103,7 @@ public class KnowledgeBase {
 		
 		OWLOntologyManager man = OWLManager.createOWLOntologyManager();
 		
+		//TODO: separate exception for schema not found from file not found.
 		//Load ELc definition vocabulary.
 		File schemaFile = new File(ELC_SCHEMA_FILENAME);
 		OWLOntology schema = man.loadOntologyFromOntologyDocument(schemaFile);

@@ -2,6 +2,9 @@
   Asp-it - CHANGELOG
 ##############################
 
+* v.1.0.:
+- Complete prototype for EL formulas
+
 * v.0.1.:
 - First working prototype for EL atomic formulas
 

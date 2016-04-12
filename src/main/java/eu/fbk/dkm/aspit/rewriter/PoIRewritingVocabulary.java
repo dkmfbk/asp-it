@@ -21,8 +21,12 @@ public class PoIRewritingVocabulary {
 
 	//--- INSTANCE LEVEL PREDICATES -----------------------------------------------------
 	
-	public final static NormalPredicate INST = manager.getPredicate("inst", 3);		
+	public final static NormalPredicate INST = manager.getPredicate("inst", 3);
+	
+	public final static NormalPredicate IS = manager.getPredicate("is", 2);
 	public final static NormalPredicate REL  = manager.getPredicate("rel", 4);
+	
+	public final static NormalPredicate IS_IT = manager.getPredicate("is_It", 2);
 			
 	//--- CLASS AXIOMS PREDICATES -------------------------------------------------------
 		
