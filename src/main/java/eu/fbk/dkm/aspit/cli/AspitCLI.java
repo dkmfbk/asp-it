@@ -233,7 +233,8 @@ public class AspitCLI {
 		
         //(Test application)
 		//String[] argtest = {"./examples/just-atomic.n3", "-v", "-lp", "./output.dlv"};
-		String[] argtest = {"./examples/complex-concepts.n3", "-v", "-lp", "./output.dlv"};
+		//String[] argtest = {"./examples/complex-concepts.n3", "-v", "-lp", "./output.dlv"};
+		String[] argtest = {"./examples/isa-test.n3", "-v", "-lp", "./output.dlv"};
 						
 		new AspitCLI(argtest).go();
 	}

@@ -1,0 +1,162 @@
+@prefix : <http://dkm.fbk.eu/asp-it/isa-test##> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://dkm.fbk.eu/asp-it/isa-test#> .
+
+<http://dkm.fbk.eu/asp-it/isa-test#> rdf:type owl:Ontology ;
+                                     
+                                     owl:imports <http://dkm.fbk.eu/asp-it/elc-schema#> .
+
+
+#################################################################
+#
+#    Annotation properties
+#
+#################################################################
+
+
+<http://dkm.fbk.eu/asp-it/elc-schema#hasIT> rdf:type owl:AnnotationProperty .
+
+
+
+
+
+#################################################################
+#
+#    Datatypes
+#
+#################################################################
+
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://dkm.fbk.eu/asp-it/isa-test#R
+
+<http://dkm.fbk.eu/asp-it/isa-test#R> rdf:type owl:ObjectProperty .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://dkm.fbk.eu/asp-it/elc-schema#Generator
+
+<http://dkm.fbk.eu/asp-it/elc-schema#Generator> rdf:type owl:Class .
+
+
+
+###  http://dkm.fbk.eu/asp-it/isa-test#A
+
+<http://dkm.fbk.eu/asp-it/isa-test#A> rdf:type owl:Class ;
+                                      
+                                      rdfs:subClassOf <http://dkm.fbk.eu/asp-it/isa-test#C> ,
+                                                      [ rdf:type owl:Restriction ;
+                                                        owl:onProperty <http://dkm.fbk.eu/asp-it/isa-test#R> ;
+                                                        owl:someValuesFrom <http://dkm.fbk.eu/asp-it/isa-test#B>
+                                                      ] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"a1\", [\"b1\", tt]]"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#A> ;
+  owl:annotatedProperty rdfs:subClassOf ;
+  owl:annotatedTarget [ rdf:type owl:Restriction ;
+                        owl:onProperty <http://dkm.fbk.eu/asp-it/isa-test#R> ;
+                        owl:someValuesFrom <http://dkm.fbk.eu/asp-it/isa-test#B>
+                      ]
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"a1\", tt]"^^xsd:string ,
+                                              "[\"a2\", tt]"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#A> ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#C> ;
+  owl:annotatedProperty rdfs:subClassOf
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/isa-test#B
+
+<http://dkm.fbk.eu/asp-it/isa-test#B> rdf:type owl:Class .
+
+
+
+###  http://dkm.fbk.eu/asp-it/isa-test#C
+
+<http://dkm.fbk.eu/asp-it/isa-test#C> rdf:type owl:Class .
+
+
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://dkm.fbk.eu/asp-it/isa-test#a1
+
+<http://dkm.fbk.eu/asp-it/isa-test#a1> rdf:type <http://dkm.fbk.eu/asp-it/isa-test#A> ,
+                                                owl:NamedIndividual ;
+                                       
+                                       <http://dkm.fbk.eu/asp-it/isa-test#R> <http://dkm.fbk.eu/asp-it/isa-test#b1> .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#A> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#a1> ;
+  owl:annotatedProperty rdf:type
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedProperty <http://dkm.fbk.eu/asp-it/isa-test#R> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#a1> ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#b1>
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/isa-test#a2
+
+<http://dkm.fbk.eu/asp-it/isa-test#a2> rdf:type <http://dkm.fbk.eu/asp-it/isa-test#A> ,
+                                                owl:NamedIndividual .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#A> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#a2> ;
+  owl:annotatedProperty rdf:type
+] .
+
+
+
+###  http://dkm.fbk.eu/asp-it/isa-test#b1
+
+<http://dkm.fbk.eu/asp-it/isa-test#b1> rdf:type <http://dkm.fbk.eu/asp-it/isa-test#B> ,
+                                                owl:NamedIndividual .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#B> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#b1> ;
+  owl:annotatedProperty rdf:type
+] .
+
+
+
+
+###  Generated by the OWL API (version [Not Released]) http://owlapi.sourceforge.net
+

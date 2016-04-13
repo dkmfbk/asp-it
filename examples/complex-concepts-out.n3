@@ -187,6 +187,12 @@
 
 <http://dkm.fbk.eu/asp-it/complex-concepts#i6> rdf:type owl:NamedIndividual ,
                                                         owl:Thing .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i6> ;
+  owl:annotatedProperty rdf:type ;
+  owl:annotatedTarget owl:Thing
+] .
 
 
 

@@ -95,13 +95,13 @@
                                           
                                           <http://dkm.fbk.eu/asp-it/just-atomic#R> <http://dkm.fbk.eu/asp-it/just-atomic#i2> .
 [ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "\"tt\""^^xsd:string ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/just-atomic#A> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/just-atomic#i1> ;
   owl:annotatedProperty rdf:type
 ] .
 [ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "\"tt\""^^xsd:string ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedProperty <http://dkm.fbk.eu/asp-it/just-atomic#R> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/just-atomic#i1> ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/just-atomic#i2>
@@ -114,7 +114,7 @@
 <http://dkm.fbk.eu/asp-it/just-atomic#i2> rdf:type <http://dkm.fbk.eu/asp-it/just-atomic#B> ,
                                                    owl:NamedIndividual .
 [ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "\"tt\""^^xsd:string ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/just-atomic#B> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/just-atomic#i2> ;
   owl:annotatedProperty rdf:type
@@ -127,7 +127,7 @@
 <http://dkm.fbk.eu/asp-it/just-atomic#i3> rdf:type <http://dkm.fbk.eu/asp-it/just-atomic#C> ,
                                                    owl:NamedIndividual .
 [ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "\"tt\""^^xsd:string ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/just-atomic#C> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/just-atomic#i3> ;
   owl:annotatedProperty rdf:type

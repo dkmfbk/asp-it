@@ -1,0 +1,40 @@
+#=============================================================================
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix elc:    <http://dkm.fbk.eu/asp-it/elc-schema#> .
+@prefix :       <http://dkm.fbk.eu/asp-it/isa-test#> .
+@base           <http://dkm.fbk.eu/asp-it/isa-test#> .
+#=============================================================================
+
+   #-------------------------------------------------------------------------
+
+    <http://dkm.fbk.eu/asp-it/isa-test#> a owl:Ontology ;                         
+                 owl:imports <http://dkm.fbk.eu/asp-it/elc-schema#> .
+
+   #-------------------------------------------------------------------------
+    # TBox axioms #
+    
+    :A a owl:Class . # Generator
+    :B a owl:Class .
+    :C a owl:Class .
+    
+    :R a owl:ObjectProperty .
+    
+    :A rdfs:subClassOf :C .
+    
+    :A rdfs:subClassOf [ a owl:Restriction ;
+                        owl:onProperty :R ;
+                        owl:someValuesFrom :B ] .
+        
+    #-------------------------------------------------------------------------
+    # ABox axioms #
+    
+    :a1 a :A .
+    :a2 a :A .
+    
+    :b1 a :B .
+    :a1 :R :b1 .
+
+#=============================================================================

@@ -203,9 +203,11 @@ public class KBProgram {
 			invocation.setInputProgram(inputProgram);
 			
 			//Filter for \inst predicates. 
-			//List<String> filters = new LinkedList<String>();
-			//filters.add("inst");
-			//invocation.setFilter(filters, true);
+			List<String> filters = new LinkedList<String>();
+			filters.add("is_it");
+			filters.add("rel_it");
+			filters.add("isa_it");
+			invocation.setFilter(filters, true);
 			invocation.addOption("-nofinitecheck");
 			
 			//List of computed models, used to check at least a model is computed.
