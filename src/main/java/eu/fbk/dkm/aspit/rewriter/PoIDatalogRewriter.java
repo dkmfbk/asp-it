@@ -1,24 +1,13 @@
 package eu.fbk.dkm.aspit.rewriter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-import org.semanticweb.drew.dlprogram.model.CacheManager;
-import org.semanticweb.drew.dlprogram.model.Clause;
-import org.semanticweb.drew.dlprogram.model.Constant;
-import org.semanticweb.drew.dlprogram.model.DLProgram;
-import org.semanticweb.drew.dlprogram.model.Literal;
-import org.semanticweb.drew.dlprogram.model.NormalPredicate;
-import org.semanticweb.drew.dlprogram.model.Term;
-import org.semanticweb.drew.dlprogram.model.Variable;
 import org.semanticweb.owlapi.model.ClassExpressionType;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLEntityVisitor;
@@ -46,61 +35,52 @@ import eu.fbk.dkm.aspit.kb.PieceOfInformation;
 public class PoIDatalogRewriter extends OWLAxiomVisitorAdapter implements
 OWLEntityVisitor{ 
 	
+	private final static IRI TT = IRI.create("tt");
+	private final static IRI TOP = IRI.create("top");
+	
 	private KnowledgeBase inputKB;
-	private OWLDataFactory factory;
-	//protected OWLOntologyManager manager;
 	
-	private DLProgram datalog;
+//	private DLProgram datalog;
 //	private Term indiv1Term, indiv2Term, indiv3Term;
-	
-	private IRI tt;
-	
+		
 	private int labelnum;
-	private String additionalRules;
+	private String rulesString;
 
     //--- CONSTRUCTORS ----------------------------------------------------------
     
     public PoIDatalogRewriter() {
     	
-    	this.tt = IRI.create("tt");
     	this.labelnum = 0;
-    	this.additionalRules = "";
-    	
-//		this.indiv1Term = getVariable("X");
-//		this.indiv2Term = getVariable("Y");
-//		this.indiv3Term = getVariable("Z");		
-	}
-
+    	this.rulesString = "";
+   	}
+    
 	//--- SET METHODS -----------------------------------------------------
         
     public void setKnowledgeBase(KnowledgeBase kb){
     	this.inputKB = kb;
     }    
-    
-	public void addStringRules(String r) {
-		this.additionalRules += r;
-	}
-	
+    	
 	//--- GET METHODS -----------------------------------------------------
 	
-	public String getAdditionalRules(){
-		return this.additionalRules;
+	public String getProgramString(){
+		return this.rulesString;
 	}
+	
+    //--- REWRITE METHODS -------------------------------------------------------
     
-    //--- REWRITE METHOD --------------------------------------------------------
-    
+	private void addStringRules(String r) {
+		this.rulesString += r;
+	}
+	
 	/**
-	 * Rewrites inputKB ontology as a Datalog program.
-	 * 
-	 * @return the output Datalog program
+	 * Rewrites inputKB ontology as a Datalog program. 
 	 */
-	public DLProgram rewrite() {
+	public void rewrite() {
 		
-		datalog = new DLProgram();
+		//datalog = new DLProgram();
 		
 		//Instantiate global properties.
 		OWLOntology ontology = inputKB.getOWLOntology();
-		this.factory = ontology.getOWLOntologyManager().getOWLDataFactory();
 		
 		//Rewriting for ontology components.
 		for (OWLLogicalAxiom ax : ontology.getLogicalAxioms()) {
@@ -118,72 +98,10 @@ OWLEntityVisitor{
 		for (OWLClass cls : ontology.getClassesInSignature()) {
 			cls.accept(this);
 		}
-
- 		//Add deduction rules.
-		//datalog.addAll(DeductionRuleset.getPrl());
 		
-		return datalog;
+		//return datalog;
 	}
-    
-	//--- ADD FACT METHODS -------------------------------------------------------
-
-	/**
-	 * Adds a fact to the translated program given a predicate and 
-	 * a list of parameter IRIs.
-	 * 
-	 * @param predicate predicate of fact.
-	 * @param params list of IRI for parameters of fact.
-	 */
-	protected void addFact(NormalPredicate predicate, IRI... params) {
-
-		List<Term> terms = new ArrayList<>();
-
-		for (IRI param : params) {
-			terms.add(CacheManager.getInstance().getConstant(param));
-		}
-
-		datalog.add(
-				new Clause(new Literal[] { new Literal(predicate, terms
-                        .toArray(new Term[terms.size()])) }, new Literal[] {}));
-	}
-	
-	//--- ADD RULE METHOD -------------------------------------------------------
-
-	/**
-	 * Adds a rule to the translated program.
-	 * 
-	 */
-	protected void addRule(Literal head, Literal... body) {		
-		datalog.add( new Clause(new Literal[] {head},  body) );	  
-	}
-
-	/**
-	 * Provides a literal with the given predicate and terms
-	 * 
-	 * @param positive indicates whether output literal is positive or negative.
-	 */	
-	protected Literal getLiteral(boolean positive, NormalPredicate predicate, Term... params) {		
-		Literal literal = new Literal(predicate, params);
-		
-		if(!positive) literal.setNegative(true);
-		
-		return literal;
-	}	
-
-	/**
-	 * Provides a constant representing the given IRI.
-	 */	
-	protected Constant getConstant(IRI i) {
-		return CacheManager.getInstance().getConstant(i);
-	}
-
-	/**
-	 * Provides a variable identified from the given string.
-	 */	
-	protected Variable getVariable(String s) {
-		return CacheManager.getInstance().getVariable(s);
-	}
-	
+    	
 	//--- COMPLEX CONCEPTS REWRITING METHODS --------------------------------------------
 	
 	private IRI getNewLabel(){
@@ -193,6 +111,7 @@ OWLEntityVisitor{
 	/**
 	 * Recursively decomposes and rewrites the input concept.
 	 * 
+	 * @param isaxiom if the input concept represent the concept of an axiom
 	 * @param individualIRI input individual
 	 * @param classIRI input (possibly complex) concept
 	 */
@@ -200,35 +119,33 @@ OWLEntityVisitor{
 		
 		//atomic case: C = \top
 		if (classExp.isOWLThing()){//treated as atomic ABox formula!
-			System.out.println("Top: " + classExp.toString());
+			//System.out.println("Top: " + classExp.toString());
 			
 			IRI label = getNewLabel();
 			
 			if(individual == null){//c in Var
 			
 				//add is_it(tt, c, Ltop) :- is(c, top).
-				addStringRules("is_it(tt, X,\""  + label + "\") :- "
-						      +"is(X, top).\n");
+				addStringRules("is_it("+ TT +", X,\""  + label + "\") :- "
+						      +"is(X," + TOP + ").\n");
 
 				//add is(c, top) :- is(c, Ltop).
-				addStringRules("is(X,top) :- "
+				addStringRules("is(X," + TOP + ") :- "
 						      +"is(X,\""  + label + "\").\n");
 				
 			} else {//c in NI
-
 				IRI individualIRI = individual.asOWLNamedIndividual().getIRI(); 
 			
 				if(isaxiom){				
-					addStringRules("is(\"" + individualIRI.getFragment() + "\", top).\n");					
+					addStringRules("is(\"" + individualIRI.getFragment() + "\"," + TOP + ").\n");					
 				}
-			
 				//add is_it(tt, c, Ltop) :- is(c, top).
-				addStringRules("is_it(tt, \"" + individualIRI.getFragment() + "\", \"" 
+				addStringRules("is_it(" + TT + ", \"" + individualIRI.getFragment() + "\", \"" 
 						+ label + "\") :- is(\"" 
-						+ individualIRI.getFragment() + "\", top).\n");
+						+ individualIRI.getFragment() + "\", " + TOP + ").\n");
 				
 				//add is(c, top) :- is(c, Ltop).
-				addStringRules("is(\"" + individualIRI.getFragment() + "\", top) :- is(\"" 
+				addStringRules("is(\"" + individualIRI.getFragment() + "\", " + TOP + ") :- is(\"" 
 						+ individualIRI.getFragment() + "\", \"" 
 						+ label + "\").\n");				
 			}
@@ -236,7 +153,7 @@ OWLEntityVisitor{
 						
 		//atomic case: C = A \in NC
 		} else if(classExp.getClassExpressionType() == ClassExpressionType.OWL_CLASS){
-			System.out.println("Atomic: " + classExp.toString());
+			//System.out.println("Atomic: " + classExp.toString());
 			
 			IRI classIRI = classExp.asOWLClass().getIRI();
 			
@@ -245,29 +162,23 @@ OWLEntityVisitor{
 			if(individual == null){//c in Var
 			
 				//add is_it(tt, c, LA) :- is(c, A).
-				addStringRules("is_it(tt, X,\""  + label + "\") :- "
+				addStringRules("is_it(" + TT + ", X,\""  + label + "\") :- "
 						      +"is(X,\""  + classIRI.getFragment() + "\").\n");
 
 				//add is(c, A) :- is(c, LA).
 				addStringRules("is(X,\""  + classIRI.getFragment() + "\") :- "
-						      +"is(X,\""  + label + "\").\n");
-				
+						      +"is(X,\""  + label + "\").\n");				
 			} else {//c in NI
-
+				
 				IRI individualIRI = individual.asOWLNamedIndividual().getIRI(); 
 			
 				if(isaxiom){
 					//add is(c, A)
-					//addFact(PoIRewritingVocabulary.INST,
-					//		tt,
-					//		individualIRI, 
-					//		classIRI);					
 					addStringRules("is(\"" + individualIRI.getFragment() + "\", \"" 
 					                       + classIRI.getFragment() + "\").\n");					
 				}
-			
 				//add is_it(tt, c, LA) :- is(c, A).
-				addStringRules("is_it(tt, \"" + individualIRI.getFragment() + "\", \"" 
+				addStringRules("is_it("+ TT + ", \"" + individualIRI.getFragment() + "\", \"" 
 						+ label + "\") :- is(\"" 
 						+ individualIRI.getFragment() + "\", \"" 
 						+ classIRI.getFragment() + "\").\n");
@@ -282,22 +193,21 @@ OWLEntityVisitor{
 						
 		//conjunction: C = C1 \and C2
 		} else if (classExp.getClassExpressionType() == ClassExpressionType.OBJECT_INTERSECTION_OF){
-			System.out.println("And: " + classExp.toString());
+			//System.out.println("And: " + classExp.toString());
 			
 			IRI label = getNewLabel();
-			
-			if(individual == null){//c in Var
 
-				//TODO: clean!!
-				OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) classExp;
-				Set<OWLClassExpression> operands = inter.getOperands();
-				OWLClassExpression[] params = new OWLClassExpression[2];
-				int i = 0;
-				for (OWLClassExpression op : operands) {
-					params[i++] = op;
-				}
-				IRI labelA = rewriteConcept(false, individual, params[0]); //*!*
-				IRI labelB = rewriteConcept(false, individual, params[1]); //*!*
+			OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) classExp;
+			Set<OWLClassExpression> operands = inter.getOperands();
+			OWLClassExpression[] params = new OWLClassExpression[2];
+			int i = 0;
+			for (OWLClassExpression op : operands) {
+				params[i++] = op;
+			}
+			IRI labelA = rewriteConcept(false, individual, params[0]); //*!*
+			IRI labelB = rewriteConcept(false, individual, params[1]); //*!*
+						
+			if(individual == null){//c in Var
 
 				//add is_it([X,Y], c, LC) :- is_it(X, c, LA), is_it(Y, c, LB).
 				addStringRules("is_it([X,Y], Z,\"" + label + "\") :- "
@@ -308,9 +218,9 @@ OWLEntityVisitor{
 				addStringRules("is(X,\"" + labelA + "\") :- "
 			               +"is(X,\"" + label + "\").\n");
 			    addStringRules("is(X,\"" + labelB + "\") :- "
-		               	   +"is(X,\"" + label + "\").\n");				
-				
+		               	   +"is(X,\"" + label + "\").\n");								
 			} else {//c in NI
+				
 				IRI individualIRI = individual.asOWLNamedIndividual().getIRI(); 
 				
 				if(isaxiom){
@@ -319,16 +229,6 @@ OWLEntityVisitor{
 										   + label + "\").\n");					
 				}
 				
-				OWLObjectIntersectionOf inter = (OWLObjectIntersectionOf) classExp;
-				Set<OWLClassExpression> operands = inter.getOperands();
-				OWLClassExpression[] params = new OWLClassExpression[2];
-				int i = 0;
-				for (OWLClassExpression op : operands) {
-					params[i++] = op;
-				}
-				IRI labelA = rewriteConcept(false, individual, params[0]); //*!*
-				IRI labelB = rewriteConcept(false, individual, params[1]); //*!*
-
 				//add is_it([X,Y], c, LC) :- is_it(X, c, LA), is_it(Y, c, LB).
 				addStringRules("is_it([X,Y], \"" + individualIRI.getFragment() + "\",\"" + label + "\") :- "
 				               +"is_it(X, \"" + individualIRI.getFragment() + "\",\"" + labelA + "\"), "
@@ -344,7 +244,7 @@ OWLEntityVisitor{
 			
 		//exists: C = \exists R.C1
 		} else if (classExp.getClassExpressionType() == ClassExpressionType.OBJECT_SOME_VALUES_FROM){
-			System.out.println("Exists: " + classExp.toString());
+			//System.out.println("Exists: " + classExp.toString());
 
 			IRI label = getNewLabel();
 			
@@ -355,7 +255,7 @@ OWLEntityVisitor{
 				
 				//add is_it([X,Y], c, LC) :- rel_it(tt, c, r, X), is_it(Y, X, LA).
 				addStringRules("is_it([X,Y], Z, \"" + label + "\") :- "
-				               +"rel_it(tt, Z, \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
+				               +"rel_it("+ TT + ", Z, \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
 	                           +"is_it(Y, X, \"" + labelA + "\").\n");
 				
 				//add is(X,LA) :- rel(c,r,X),is(c,LC).
@@ -370,11 +270,10 @@ OWLEntityVisitor{
 					//add is(c,LC).
 					addStringRules("is(\"" + individualIRI.getFragment() + "\", \"" 
 										   + label + "\").\n");					
-				}
-				
+				}				
 				//add is_it([X,Y], c, LC) :- rel_it(tt, c, r, X), is_it(Y, X, LA).
 				addStringRules("is_it([X,Y], \"" + individualIRI.getFragment() + "\", \"" + label + "\") :- "
-				               +"rel_it(tt, \"" + individualIRI.getFragment() + "\", \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
+				               +"rel_it(" + TT + ", \"" + individualIRI.getFragment() + "\", \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
 	                           +"is_it(Y, X, \"" + labelA + "\").\n");
 				
 				//add is(X,LA) :- rel(c,r,X),is(c,LC).
@@ -421,32 +320,30 @@ OWLEntityVisitor{
 	//Rewrite R(a,b)
 	public void visit(OWLObjectPropertyAssertionAxiom axiom) {
 		
-		//add Rel(a, R, b).
-		//addFact(PoIRewritingVocabulary.REL,
-		//		tt,
-		//		axiom.getSubject().asOWLNamedIndividual().getIRI(),
- 		//		axiom.getProperty().asOWLObjectProperty().getIRI(),
-		//		axiom.getObject().asOWLNamedIndividual().getIRI()
-		//);
-		addStringRules("rel(\"" + axiom.getSubject().asOWLNamedIndividual().getIRI().getFragment() + "\", \""
-				                + axiom.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", \"" 
-				                + axiom.getObject().asOWLNamedIndividual().getIRI().getFragment() + "\").\n");
+		OWLNamedIndividual subj = axiom.getSubject().asOWLNamedIndividual();
+		OWLObjectProperty prop = axiom.getProperty().asOWLObjectProperty();
+		OWLNamedIndividual obj = axiom.getObject().asOWLNamedIndividual();
 		
-		//add rel_it(tt, a, R, b) :- rel(tt, a, R, b).
-		addStringRules("rel_it(tt, \""
-								+ axiom.getSubject().asOWLNamedIndividual().getIRI().getFragment() + "\", \""
-								+ axiom.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", \"" 
-								+ axiom.getObject().asOWLNamedIndividual().getIRI().getFragment() +
-				                "\") :- rel(\"" + axiom.getSubject().asOWLNamedIndividual().getIRI().getFragment() + "\", \""
-				                + axiom.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", \"" 
-				                + axiom.getObject().asOWLNamedIndividual().getIRI().getFragment() + "\").\n");
+		//add Rel(a, R, b).
+		addStringRules("rel(\"" + subj.getIRI().getFragment() + "\", \""
+				                + prop.getIRI().getFragment() + "\", \"" 
+				                + obj.getIRI().getFragment() + "\").\n");
+		
+		//add rel_it(tt, a, R, b) :- rel(a, R, b).
+		addStringRules("rel_it(" + TT + ", \""
+								+ subj.getIRI().getFragment() + "\", \""
+								+ prop.getIRI().getFragment() + "\", \"" 
+								+ obj.getIRI().getFragment() +
+				                "\") :- rel(\"" + subj.getIRI().getFragment() + "\", \""
+				                + prop.getIRI().getFragment() + "\", \"" 
+				                + obj.getIRI().getFragment() + "\").\n");
 
 		PieceOfInformation poi = new PieceOfInformation(axiom);
 		
 		poi.setPredicate("rel_it");
-		poi.addArgument(axiom.getSubject().asOWLNamedIndividual().getIRI().getFragment());
-		poi.addArgument(axiom.getProperty().asOWLObjectProperty().getIRI().getFragment());
-		poi.addArgument(axiom.getObject().asOWLNamedIndividual().getIRI().getFragment());
+		poi.addArgument(subj.getIRI().getFragment());
+		poi.addArgument(prop.getIRI().getFragment());
+		poi.addArgument(obj.getIRI().getFragment());
 		
 		inputKB.getPOIs().add(poi);
 		
@@ -461,11 +358,9 @@ OWLEntityVisitor{
 		OWLClassExpression subClass = axiom.getSubClass();
 		OWLClassExpression superClass = axiom.getSuperClass();
 		
-		System.out.println("SubClass: " + axiom);
-		
-		//XXX: ############################
-		
-		IRI gen = subClass.asOWLClass().getIRI();
+		//System.out.println("SubClass: " + axiom);
+				
+		IRI gen = subClass.asOWLClass().getIRI(); 
 		
 		//rewrites complex concept for superclass
 		IRI labelA = rewriteConcept(false, null, superClass); //*!*

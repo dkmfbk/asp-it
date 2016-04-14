@@ -139,13 +139,13 @@ public class KBProgram {
 		
 		//XXX: ############################
 		
-		datalogProgram = rewriter.rewrite();
-		additionalRules = rewriter.getAdditionalRules();
+		rewriter.rewrite();
+		additionalRules = rewriter.getProgramString();
 		//System.out.println("Rewriting program complete.");
 		
 		//TODO: separate this from rewrite()
 		//Interaction with DLV: computes the IT for the input axioms
-		computeIT(datalogProgram);
+		computeIT();
 				
 		long endTime = System.currentTimeMillis();
 		rewritingTime = endTime - startTime;
@@ -182,32 +182,33 @@ public class KBProgram {
 	
 	/**
 	 * Interacts with DLV to compute the IT for the input formulas.
-	 * 
-	 * @param datalogKB program to be evaluated by DLV
 	 */
-	private void computeIT(DLProgram datalogKB){
+	private void computeIT(){
 		
 		DLVInvocation invocation = DLVWrapper.getInstance().createInvocation(dlvPath);
 		DLVInputProgram inputProgram = new DLVInputProgramImpl();
 
 		try {			
-			DLProgramStorer storer = new DLProgramStorerImpl();
-			StringBuilder target = new StringBuilder();
-			storer.store(datalogKB, target);
+			//DLProgramStorer storer = new DLProgramStorerImpl();
+			//StringBuilder target = new StringBuilder();
+			//storer.store(datalogKB, target);
             
 			//Add to DLV input program the contents of KBprogram. 
-			String datalogKBText = target.toString() + additionalRules;
+			//String datalogKBText = target.toString() + additionalRules;
+			String datalogKBText = additionalRules;
 			inputProgram.addText(datalogKBText);
 			
 			//Set input program for current invocation.
 			invocation.setInputProgram(inputProgram);
 			
-			//Filter for \inst predicates. 
+			//Filter for IT predicates. 
 			List<String> filters = new LinkedList<String>();
 			filters.add("is_it");
 			filters.add("rel_it");
 			filters.add("isa_it");
 			invocation.setFilter(filters, true);
+			
+			//NOFINITECHECK needed to use list terms.
 			invocation.addOption("-nofinitecheck");
 			
 			//List of computed models, used to check at least a model is computed.
@@ -296,9 +297,9 @@ public class KBProgram {
 		//System.out.println(datalogGlobal.getStatements().size());
 		
 		FileWriter writer = new FileWriter(outputFilePath);
-		storer.store(datalogProgram, writer);
+		//storer.store(datalogProgram, writer);
 		writer.write(additionalRules);
-		//writer.flush();
+		writer.flush();
 		writer.close();
 		
 		//System.out.println("CKR program saved in: " + outputFilePath);
