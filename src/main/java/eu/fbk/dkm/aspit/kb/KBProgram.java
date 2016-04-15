@@ -22,11 +22,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.semanticweb.drew.dlprogram.format.DLProgramStorer;
-import org.semanticweb.drew.dlprogram.format.DLProgramStorerImpl;
-import org.semanticweb.drew.dlprogram.model.DLProgram;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-
 import eu.fbk.dkm.aspit.rewriter.PoIDatalogRewriter;
 
 /**
@@ -34,27 +29,25 @@ import eu.fbk.dkm.aspit.rewriter.PoIDatalogRewriter;
  * @version 1.0
  * 
  * Represents the program generated in the DLP translation. 
- * Contains methods to compute and store the program. 
+ * Contains methods to generate the program, compute its resulting IT 
+ * and store the program. 
  */
 public class KBProgram {
 	
 	//--- FIELDS ---------------------------------------------
 	
-	//TODO: move this to CLI
-	private static final String DEFAULT_DLV_PATH = "./localdlv/dlv";
-	private static final String DEFAULT_OUTPUT_FILENAME = "./output.dlv";
-	
 	private KnowledgeBase inputKB;
-	private OWLOntologyManager manager;
 	
-	private DLProgram datalogProgram;
-	private String additionalRules = "";
+	//private DLProgram datalogProgram;
+	private String programString = "";
 	
 	private String outputFilePath; //Path to the output datalog file
 	private String dlvPath; 	   //Path to DLV solver location
 	
-	private long rewritingTime;  //time in milliseconds for the complete rewriting
+	private long rewritingTime;  //time in milliseconds for the program rewriting
 	private long modelComputationTime; //time in milliseconds for the DLV model computation
+	
+	private int infotermsNumber; //Number of computed information terms
 	
 	//--- CONSTRUCTOR ------------------------------------------
 
@@ -63,12 +56,10 @@ public class KBProgram {
 	 */
 	public KBProgram(KnowledgeBase inputKB) {
 		this.inputKB = inputKB;
-		this.manager = inputKB.getOWLOntology().getOWLOntologyManager();
-		
-		this.outputFilePath = DEFAULT_OUTPUT_FILENAME;
-		this.dlvPath = DEFAULT_DLV_PATH;
-		
+				
 		this.rewritingTime = 0;
+		this.modelComputationTime = 0;
+		this.infotermsNumber = 0;
 	}
 	
 	//--- GET METHODS -----------------------------------------------------
@@ -100,13 +91,13 @@ public class KBProgram {
 	public long getmodelComputationTime() { 
 		return modelComputationTime; 
 	}
-	
+
 	/**
-	 * @return the program size in statements
+	 * @return the getinfotermsNumber
 	 */
-	public int getProgramSize() { 
-		return datalogProgram.getStatements().size(); 
-	}	
+	public long getinfotermsNumber() { 
+		return infotermsNumber; 
+	}
 	
 	//--- SET METHODS -----------------------------------------------------
 	
@@ -127,36 +118,31 @@ public class KBProgram {
 	//--- REWRITING ---------------------------------------------
 	
 	/**
-	 * Rewrites the whole input CKR to global and local programs.
+	 * Rewrites the input KB to a datalog program.
 	 */
 	public void rewrite(){
-		
+				
+		PoIDatalogRewriter rewriter = new PoIDatalogRewriter();
+		rewriter.setKnowledgeBase(inputKB);
+
 		long startTime = System.currentTimeMillis();
 		
 		//Rewriting to datalog.
-		PoIDatalogRewriter rewriter = new PoIDatalogRewriter();
-		rewriter.setKnowledgeBase(inputKB);
-		
-		//XXX: ############################
-		
 		rewriter.rewrite();
-		additionalRules = rewriter.getProgramString();
-		//System.out.println("Rewriting program complete.");
 		
-		//TODO: separate this from rewrite()
-		//Interaction with DLV: computes the IT for the input axioms
-		computeIT();
-				
 		long endTime = System.currentTimeMillis();
 		rewritingTime = endTime - startTime;
+		
+		programString = rewriter.getProgramString();
+		//System.out.println("Rewriting program complete.");
 	}
 	
 	//--- SEARCH IN POIs ------------------------------------------
 	
-	private PieceOfInformation findByAtom(String pred, List<Term> list){	
+	private PieceOfInformation findByAtom(String pred, List<Term> termlist){	
 		
 		LinkedList<String> slist = new LinkedList<String>();
-		for(Term t : list){
+		for(Term t : termlist){
 			slist.add(t.toString());
 		}
 		slist.removeFirst(); //removes IT term
@@ -183,7 +169,7 @@ public class KBProgram {
 	/**
 	 * Interacts with DLV to compute the IT for the input formulas.
 	 */
-	private void computeIT(){
+	public void computeIT(){
 		
 		DLVInvocation invocation = DLVWrapper.getInstance().createInvocation(dlvPath);
 		DLVInputProgram inputProgram = new DLVInputProgramImpl();
@@ -195,7 +181,7 @@ public class KBProgram {
             
 			//Add to DLV input program the contents of KBprogram. 
 			//String datalogKBText = target.toString() + additionalRules;
-			String datalogKBText = additionalRules;
+			String datalogKBText = programString;
 			inputProgram.addText(datalogKBText);
 			
 			//Set input program for current invocation.
@@ -228,27 +214,29 @@ public class KBProgram {
 					model.beforeFirst();
 					while (model.hasMorePredicates()) {
 
-					Predicate predicate = model.nextPredicate();
-					//Predicate predicate = model.getPredicate("inst");
-					if (predicate != null){
-						//System.out.println(predicate.name() + ": ");
-						while (predicate.hasMoreLiterals()) {
+						Predicate predicate = model.nextPredicate();
+						//Predicate predicate = model.getPredicate("inst");
+						if (predicate != null){
+							//System.out.println(predicate.name() + ": ");
+							while (predicate.hasMoreLiterals()) {
 
-							Literal literal = predicate.nextLiteral();
-							PieceOfInformation poi = findByAtom(predicate.name(), literal.attributes());
-							//System.out.println(predicate.name() + "(" + literal.attributes().toString() + ")");
+								Literal literal = predicate.nextLiteral();
 							
-							if (poi != null){																					 
-							    //if POI is found, add first argument as IT
-								poi.addInfoterm(literal.getAttributeAt(0).toString());
-								//System.out.println("IT: " + poi.getInfoterms().getFirst());								
+								//for each instance of the predicate, search for a corresponding POI
+								PieceOfInformation poi = findByAtom(predicate.name(), literal.attributes());
+								//System.out.println(predicate.name() + "(" + literal.attributes().toString() + ")");
+							
+								if (poi != null){															 
+									//if POI is found, add first argument as IT
+									poi.addInfoterm(literal.getAttributeAt(0).toString());
+									infotermsNumber++;
+									//System.out.println("IT: " + poi.getInfoterms().getFirst());								
+								}							
+									//System.out.print(literal);
+									//System.out.println(", ");	
+									//}
 							}
-							
-								//System.out.print(literal);
-								//System.out.println(", ");	
-							//}
 						}
-					}
 					}
 										
 					//System.out.println("}");
@@ -271,8 +259,10 @@ public class KBProgram {
 				System.err.println(k);
 			
 			//System.out.println("Number of computed models: " + models.size());
-			if(models.size() == 0) 
+			if(models.size() == 0) {
 				System.err.println("[!] No models for KB program.");
+				System.exit(1);				
+			}
 			
 		} catch (DLVInvocationException | IOException e) {
 			System.err.println("[!] Cannot execute DLV invocation. Check if DLV executable file exists at path: " + dlvPath + "\n");
@@ -284,21 +274,20 @@ public class KBProgram {
 	//--- FILE MANAGEMENT ---------------------------------------------
 	
 	/**
-	 * Stores the computed CKR program to file.
+	 * Stores the computed program to file.
 	 * 
 	 * @throws IOException
 	 */
 	public void storeToFile() throws IOException {
 		
-		DLProgramStorer storer = new DLProgramStorerImpl();
-		
+		//DLProgramStorer storer = new DLProgramStorerImpl();
 		//String datalogFile = inputCKR.getGlobalOntologyFilename() + ".dlv";
 		//String datalogFile = "./testcase/output.dlv";
 		//System.out.println(datalogGlobal.getStatements().size());
 		
 		FileWriter writer = new FileWriter(outputFilePath);
 		//storer.store(datalogProgram, writer);
-		writer.write(additionalRules);
+		writer.write(programString);
 		writer.flush();
 		writer.close();
 		

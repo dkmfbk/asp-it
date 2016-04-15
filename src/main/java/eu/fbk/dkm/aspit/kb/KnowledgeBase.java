@@ -32,6 +32,7 @@ public class KnowledgeBase {
 	private static final String ELC_SCHEMA_URI = "http://dkm.fbk.eu/asp-it/elc-schema#";
 	
 	private String outputFilePath;
+	private String poiWarnings;
 
 	private String kbFilename;
 	private File kbFile;
@@ -47,6 +48,7 @@ public class KnowledgeBase {
 	
 	public KnowledgeBase() {
 		this.kbFilename = "";
+		this.poiWarnings = "";
 	}
 
 	//--- GET METHODS ---------------------------------------------
@@ -70,6 +72,11 @@ public class KnowledgeBase {
 	public Set<PieceOfInformation> getPOIs() {
 		return POIs;
 	}
+
+	public String getPOIWarnings() {
+		return poiWarnings;
+	}
+
 	
 	//--- SET METHODS ---------------------------------------------
 	
@@ -92,8 +99,8 @@ public class KnowledgeBase {
 	//--- FILES LOAD ---------------------------------------------
 	
 	/**
-	 * Initializes the files and loads the ontology
-	 * in the knowledge bases.
+	 * Initializes the files and loads the input ontology
+	 * in the knowledge base.
 	 * 
 	 * @throws OWLOntologyCreationException
 	 */
@@ -102,15 +109,19 @@ public class KnowledgeBase {
 		this.setOntologyFile(file);
 		
 		OWLOntologyManager man = OWLManager.createOWLOntologyManager();
-		
-		//TODO: separate exception for schema not found from file not found.
-		//Load ELc definition vocabulary.
-		File schemaFile = new File(ELC_SCHEMA_FILENAME);
-		OWLOntology schema = man.loadOntologyFromOntologyDocument(schemaFile);
-		
+
 		//Load ontology.
 		OWLOntology onto = man.loadOntologyFromOntologyDocument(file);
-		man.addAxioms(onto, schema.getAxioms()); //*!*
+		
+		//Load ELc definition vocabulary.
+		try{
+			File schemaFile = new File(ELC_SCHEMA_FILENAME);
+			OWLOntology schema = man.loadOntologyFromOntologyDocument(schemaFile);
+			man.addAxioms(onto, schema.getAxioms()); //*!*	
+			
+		} catch(Exception e) {
+			throw new OWLOntologyCreationException("[!] ELc schema not found in " + ELC_SCHEMA_FILENAME);
+		}
 		
 		this.setOWLOntology(onto);
 	}
@@ -140,14 +151,16 @@ public class KnowledgeBase {
     		   //System.out.println(ann);
     		}
     		
+    		if(annotations.isEmpty()){
+    			poiWarnings += "   [!] No ITs for axiom: " + poi.getFormula() + "\n";
+    		}
+    		
     		OWLAxiom ax = poi.getFormula().getAnnotatedAxiom(annotations);
     		//man.removeAxiom(getOWLOntology(), poi.getFormula());
     		axioms.add(ax);    		
     	}
     	
     	man.addAxioms(getOWLOntology(), axioms);
-		
-		return;
 	}
 	
 	//--- FILES SAVE ---------------------------------------------

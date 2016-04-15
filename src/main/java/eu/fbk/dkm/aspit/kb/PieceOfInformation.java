@@ -9,11 +9,11 @@ import org.semanticweb.owlapi.model.OWLAxiom;
 
 /**
  * @author Loris
- * @version 0.1
+ * @version 1.0
  * 
- * Represents a single piece of information (POI) of the input ontology.
+ * Represents a single (set of) pieces of information (POI) of the input ontology.
  * Stores the information terms satisfying the formula and the 
- * DLV representation of the POI.
+ * Datalog representation of the POI.
  */
 public class PieceOfInformation {
 	

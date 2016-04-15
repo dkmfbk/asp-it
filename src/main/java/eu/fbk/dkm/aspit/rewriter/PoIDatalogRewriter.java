@@ -29,7 +29,7 @@ import eu.fbk.dkm.aspit.kb.PieceOfInformation;
  * @author Loris
  * @version 1.0
  * 
- * Encodes the translation to Datalog of the PoI of input ontology.
+ * Encodes the translation to Datalog for the PoIs of input ontology.
  * 
  */
 public class PoIDatalogRewriter extends OWLAxiomVisitorAdapter implements
@@ -39,10 +39,7 @@ OWLEntityVisitor{
 	private final static IRI TOP = IRI.create("top");
 	
 	private KnowledgeBase inputKB;
-	
-//	private DLProgram datalog;
-//	private Term indiv1Term, indiv2Term, indiv3Term;
-		
+			
 	private int labelnum;
 	private String rulesString;
 
@@ -73,7 +70,7 @@ OWLEntityVisitor{
 	}
 	
 	/**
-	 * Rewrites inputKB ontology as a Datalog program. 
+	 * Rewrites input ontology as a Datalog program. 
 	 */
 	public void rewrite() {
 		
@@ -87,17 +84,17 @@ OWLEntityVisitor{
 			ax.accept(this);
 		}
 		
-		for (OWLNamedIndividual i : ontology.getIndividualsInSignature()) {
-			i.accept(this);
-		}
+		//for (OWLNamedIndividual i : ontology.getIndividualsInSignature()) {
+		//	i.accept(this);
+		//}
 
-		for (OWLObjectProperty p : ontology.getObjectPropertiesInSignature()) {
-			p.accept(this);
-		}
+		//for (OWLObjectProperty p : ontology.getObjectPropertiesInSignature()) {
+		//	p.accept(this);
+		//}
 
-		for (OWLClass cls : ontology.getClassesInSignature()) {
-			cls.accept(this);
-		}
+		//for (OWLClass cls : ontology.getClassesInSignature()) {
+		//	cls.accept(this);
+		//}
 		
 		//return datalog;
 	}
@@ -393,7 +390,7 @@ OWLEntityVisitor{
 	//- - RBOX AXIOMS - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 		
 	//- - SIGNATURE - - - - - - - - - - - - - - - - - - - - - - - -	
-	
+		
 	//- - NOT TREATED - - - - - - - - - - - - - - - - - - - - - - - 
 		
 	@Override
@@ -409,9 +406,9 @@ OWLEntityVisitor{
 	}
 
 	@Override
-	public void visit(OWLNamedIndividual arg0) {
+	public void visit(OWLNamedIndividual individual) {
 	}
-
+	
 	@Override
 	public void visit(OWLDatatype arg0) {
 	}

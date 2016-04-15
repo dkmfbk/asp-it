@@ -71,6 +71,13 @@
                                                         owl:someValuesFrom <http://dkm.fbk.eu/asp-it/isa-test#B>
                                                       ] .
 [ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"a1\", tt]"^^xsd:string ,
+                                              "[\"a2\", tt]"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#A> ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#C> ;
+  owl:annotatedProperty rdfs:subClassOf
+] .
+[ rdf:type owl:Axiom ;
   <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"a1\", [\"b1\", tt]]"^^xsd:string ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#A> ;
   owl:annotatedProperty rdfs:subClassOf ;
@@ -78,13 +85,6 @@
                         owl:onProperty <http://dkm.fbk.eu/asp-it/isa-test#R> ;
                         owl:someValuesFrom <http://dkm.fbk.eu/asp-it/isa-test#B>
                       ]
-] .
-[ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"a1\", tt]"^^xsd:string ,
-                                              "[\"a2\", tt]"^^xsd:string ;
-  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#A> ;
-  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#C> ;
-  owl:annotatedProperty rdfs:subClassOf
 ] .
 
 
@@ -118,15 +118,15 @@
                                        <http://dkm.fbk.eu/asp-it/isa-test#R> <http://dkm.fbk.eu/asp-it/isa-test#b1> .
 [ rdf:type owl:Axiom ;
   <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
-  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#A> ;
-  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#a1> ;
-  owl:annotatedProperty rdf:type
-] .
-[ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedProperty <http://dkm.fbk.eu/asp-it/isa-test#R> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#a1> ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#b1>
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/isa-test#A> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/isa-test#a1> ;
+  owl:annotatedProperty rdf:type
 ] .
 
 

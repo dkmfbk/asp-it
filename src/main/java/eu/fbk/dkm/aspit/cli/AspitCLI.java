@@ -21,6 +21,9 @@ import eu.fbk.dkm.aspit.kb.KnowledgeBase;
 public class AspitCLI {
 
 	//--- FIELDS -----------------------------------------------
+
+	private static final String DEFAULT_DLV_PATH = "./localdlv/dlv";
+	//private static final String DEFAULT_OUTPUT_FILENAME = "./output.dlv";
 	
     private KnowledgeBase inputKB;
     private KBProgram outputKBProgram;
@@ -68,18 +71,21 @@ public class AspitCLI {
 		try {
 			inputKB.loadOntology();
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			System.exit(1);
 		}
 		if(verbose) System.out.println("Input ontology loaded: " + inputKB.getOntologyFilename());
 		
 		//Create new program for the input KB.
 		outputKBProgram = new KBProgram(inputKB);
-				
-		//XXX: ############################
 		
 		//Set possibly custom DLV, output file path and lp program
 		if(dlvPath != null) 
 			outputKBProgram.setDlvPath(dlvPath);
+		else{
+			dlvPath = DEFAULT_DLV_PATH;
+			outputKBProgram.setDlvPath(dlvPath);
+		}
 
 		if(outputKBFilePath != null) 
 			inputKB.setOutputFilePath(outputKBFilePath);
@@ -93,32 +99,45 @@ public class AspitCLI {
 		if(verbose) System.out.println("Rewriting program...");
 		outputKBProgram.rewrite();
 				
-		if(verbose){
-			System.out.println("Rewriting completed in " + outputKBProgram.getRewritingTime() + " ms.");
-			System.out.println("DLV computation time: " + outputKBProgram.getmodelComputationTime() + " ms.");
-		}
+		if(verbose)
+			System.out.println("Rewriting completed in: " + outputKBProgram.getRewritingTime() + " ms.");
 
+		//Interaction with DLV: computes the IT for the input axioms
+		outputKBProgram.computeIT();
+		
+		if(verbose)
+			System.out.println("IT computed in: " + outputKBProgram.getmodelComputationTime() + " ms.");
+		
 		//Add IT annotations to KB
 		inputKB.addITAnnotations();
-		if(verbose) System.out.println("IT annotations added to KB.");
-		
-		//Store the program to file.
+
+		if(verbose){
+			String warnings = inputKB.getPOIWarnings();
+			if(!warnings.isEmpty())
+				System.out.print(warnings);
+			
+			System.out.println("IT annotations added to KB: " + outputKBProgram.getinfotermsNumber());
+		}
+
+		//If required, store the program to file.
 		if(outputDLPFilePath != null){
 			try {
 				outputKBProgram.storeToFile();
+		    	if(verbose) System.out.println("KB program saved in: " + outputKBProgram.getOutputFilePath());
+		    	
 	    	} catch (Exception e) {
 		    	e.printStackTrace();
 	    	}
-	    	if(verbose) System.out.println("KB program saved in: " + outputKBProgram.getOutputFilePath());
 		}
-		
+   
 		//Save ontology to file
 		try {
 			inputKB.saveToN3();
+			if(verbose) System.out.println("Output KB saved to: " + inputKB.getOutputFilePath() + "\n");
+			
 		} catch (OWLOntologyStorageException e) {
 			e.printStackTrace();
 		}
-		if(verbose) System.out.println("Output KB saved to: " + inputKB.getOutputFilePath() + "\n");
 		
 		System.out.println("Asp-it: process completed.");
 	}
@@ -153,6 +172,7 @@ public class AspitCLI {
 			System.err.println("[!] Missing argument: <input-ontology-file>");
 			System.err.println();			
 			return false;
+			
 		} else {
 			inputKB.setOntologyFilename(args[0]);
 			if(verbose) System.out.println("Input ontology: " + inputKB.getOntologyFilename());
@@ -160,22 +180,36 @@ public class AspitCLI {
 			for (int i = 1; i < args.length; i++) {				
 				switch (args[i]) {
 				case "-dlv":
-					if(i+1 < args.length)
-					   dlvPath = args[++i];
+					if(i+1 < args.length && !args[i+1].startsWith("-"))
+						dlvPath = args[++i];
+					else {
+						System.err.println("[!] Missing argument: <dlv-path>");						
+						return false;
+					}						
 					break;
 				case "-out":
-					if(i+1 < args.length)
+					if(i+1 < args.length && !args[i+1].startsWith("-"))
 					   outputKBFilePath = args[++i];
+					else {
+						System.err.println("[!] Missing argument: <output-file>");						
+						return false;						
+					}
 					break;
 				case "-lp":
-					if(i+1 < args.length)
+					if(i+1 < args.length && !args[i+1].startsWith("-"))
 					   outputDLPFilePath = args[++i];
+					else {
+						System.err.println("[!] Missing argument: <program-file>");						
+						return false;						
+					}											
 					break;
 				case "-v":
 				    verbose = true;
 					break;
-				default:
-				    return false; //more arguments than expected 
+				default://arguments not supported
+					System.err.println("[!] Option not supported: " + args[i]);
+					System.err.println();
+				    return false; 
 				}
 			}
 			return true;
@@ -229,14 +263,15 @@ public class AspitCLI {
 	public static void main(String[] args) throws OWLOntologyCreationException,
 			IOException, ParseException, DLVInvocationException {
 		
-        //new AspitCLI(args).go();
+        new AspitCLI(args).go();
 		
         //(Test application)
 		//String[] argtest = {"./examples/just-atomic.n3", "-v", "-lp", "./output.dlv"};
 		//String[] argtest = {"./examples/complex-concepts.n3", "-v", "-lp", "./output.dlv"};
-		String[] argtest = {"./examples/isa-test.n3", "-v", "-lp", "./output.dlv"};
+		//String[] argtest = {"./examples/isa-test.n3", "-v", "-lp", "./output.dlv"};
+		//String[] argtest = {"./examples/food-and-wines-demo.n3", "-v", "-lp", "./output.dlv"};
 						
-		new AspitCLI(argtest).go();
+		//new AspitCLI(argtest).go();
 	}
 	
 }
