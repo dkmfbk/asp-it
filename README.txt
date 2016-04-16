@@ -10,6 +10,28 @@ research idea and is intended to be used only to demonstrate and evaluate our
 work. Please contact the authors for any other need.*
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+= INSTALLATION =
+
+The latest binary release of Asp-it (1.0) can be found at 
+(https://dkm.fbk.eu/resources/asp-it/asp-it.zip).  
+See also Asp-it GitHub releases page (https://github.com/dkmfbk/asp-it/releases) 
+for current and previous releases.  
+
+The source code (https://github.com/dkmfbk/asp-it) is distributed as a Maven 
+project: binaries can be built executing "mvn assembly:assembly" from the main 
+project directory. 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+= REQUIREMENTS =
+
+ - DLV 2012-12-17 (or newer) [http://www.dlvsystem.com/dlv/]
+   For ease of use, it is preferrable to install a copy of the DLV executable in 
+   "/localdlv/dlv", the directory used by default as DLV path by the prototype
+
+ - Java runtime version 1.7 (or greater)
+ - Windows, Linux or Mac OS X operating system 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 = USAGE =
 
 Usage: asp-it <input-ontology-file> [<options>]
@@ -27,16 +49,6 @@ Options:
                      (default: false)
  -dlv <dlv-path>   : specifies the path to the DLV executable 
                      (default: localdlv/dlv)
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-= REQUIREMENTS =
-
- - DLV 2012-12-17 (or newer) [http://www.dlvsystem.com/dlv/]
-   For ease of use, it is preferrable to install a copy of the DLV executable in 
-   "/localdlv/dlv", the directory used by default as DLV path by the prototype
-
- - Java runtime version 1.7 (or greater)
- - Windows, Linux or Mac OS X operating system 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 = KNOWN LIMITATIONS =
