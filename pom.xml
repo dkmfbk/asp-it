@@ -60,12 +60,12 @@
       <url>file:///${basedir}/mvnrepo</url>
     </repository>
  -->
-  <repositories>
+<!--  <repositories>
         <repository>
             <id>ghxiao-mvn-repo-releases</id>
             <url>https://github.com/ghxiao/ghxiao-mvn-repo/raw/master/releases</url>
-        </repository>
-  </repositories>
+        </repository> 
+  </repositories> -->
  
   <dependencies>
      <dependency>
@@ -92,11 +92,11 @@
 	<version>4.2</version>
      </dependency>
      
-     <dependency>
+<!--    <dependency>
 	<groupId>org.semanticweb.drew</groupId>
 	<artifactId>drew</artifactId>
 	<version>0.3-beta-3</version>
-     </dependency>
+     </dependency> -->
   </dependencies>
   
   <build>

@@ -44,20 +44,20 @@
 			<directory>.</directory>
 			<outputDirectory>.</outputDirectory>
 			<includes>
-				<include>README*</include>
+				<include>README.txt</include>
 			        <include>LICENSE*</include>
 			        <include>THIRD-PARTY*</include>
 			   	<include>CHANGELOG*</include>
 			</includes>
 		</fileSet>
 
-		<!-- <fileSet>
-			<directory>.</directory>
+		<fileSet>
+			<directory>demo</directory>
 			<outputDirectory>demo</outputDirectory>
 			<includes>
-				<include>DEMO_README.txt</include>
+				<include>*</include>
 			</includes>
-		</fileSet> -->
+		</fileSet>
 
 		<fileSet>
 			<directory>localdlv</directory>

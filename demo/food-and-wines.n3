@@ -1,0 +1,68 @@
+#=============================================================================
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix elc:    <http://dkm.fbk.eu/asp-it/elc-schema#> .
+@prefix :       <http://dkm.fbk.eu/asp-it/food-and-wines-demo#> .
+@base           <http://dkm.fbk.eu/asp-it/food-and-wines-demo#> .
+#=============================================================================
+
+   #-------------------------------------------------------------------------
+
+    <http://dkm.fbk.eu/asp-it/food-and-wines-demo#> a owl:Ontology ;                         
+                 owl:imports <http://dkm.fbk.eu/asp-it/elc-schema#> .
+
+   #-------------------------------------------------------------------------
+    # TBox axioms #
+    
+    :Wine a owl:Class .
+    :Food a owl:Class .
+    :Color a owl:Class .
+    
+    :isColorOf a owl:ObjectProperty .
+    :goesWith a owl:ObjectProperty .
+    
+    # Ax1 #
+    :Food rdfs:subClassOf [ a owl:Restriction ;
+                            owl:onProperty :goesWith ;
+                            owl:someValuesFrom :Color ] .
+
+    # Ax2 #
+    :Color rdfs:subClassOf [ a owl:Restriction ;
+                            owl:onProperty :isColorOf ;
+                            owl:someValuesFrom :Wine ] .
+
+    # Ax3 #
+    :Food rdfs:subClassOf [ a owl:Restriction ;
+                            owl:onProperty :goesWith ;
+                            owl:someValuesFrom [ a owl:Class;
+                                                 owl:intersectionOf 
+                                                 ( :Color [ a owl:Restriction ;
+                                                            owl:onProperty :isColorOf ;
+                                                            owl:someValuesFrom :Wine ] 
+                                                 ) 
+                                               ]
+                          ] .
+
+    #-------------------------------------------------------------------------
+    # ABox axioms #
+    
+    :meat a :Food .
+    :fish a :Food .
+    
+    :red a :Color .
+    :white a :Color .
+    
+    :barolo a :Wine .
+    :chardonnay a :Wine .
+    :teroldego a :Wine .
+    
+    :meat :goesWith :red .
+    :fish :goesWith :white .
+    
+    :red :isColorOf :barolo .
+    :red :isColorOf :teroldego .
+    :white :isColorOf :chardonnay .
+
+#=============================================================================

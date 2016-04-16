@@ -36,7 +36,7 @@ public class KBProgram {
 	
 	//--- FIELDS ---------------------------------------------
 	
-	private KnowledgeBase inputKB;
+	private KnowledgeBase inputKB; 
 	
 	//private DLProgram datalogProgram;
 	private String programString = "";

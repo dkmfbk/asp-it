@@ -5,7 +5,6 @@ import it.unical.mat.wrapper.DLVInvocationException;
 import java.io.File;
 import java.io.IOException;
 
-import org.semanticweb.drew.dlprogram.parser.ParseException;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
@@ -57,9 +56,8 @@ public class AspitCLI {
 		if (!parseArgs(args)) {
 			printUsage();
 			System.exit(1);
-		}
+		} 
 		
-		//TODO: move controls of ontology and schema file existence in loadOntology
 		//Check input file existence
 		File ontofile = new File(inputKB.getOntologyFilename());
 		if(!ontofile.exists()){
@@ -257,11 +255,10 @@ public class AspitCLI {
 	 * @param args
 	 * @throws OWLOntologyCreationException
 	 * @throws IOException
-	 * @throws ParseException
 	 * @throws DLVInvocationException
 	 */
 	public static void main(String[] args) throws OWLOntologyCreationException,
-			IOException, ParseException, DLVInvocationException {
+			IOException, DLVInvocationException { 
 		
         new AspitCLI(args).go();
 		
