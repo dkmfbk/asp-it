@@ -42,11 +42,15 @@ Options:
  -dlv <dlv-path>   : specifies the path to the DLV executable 
                      (default: localdlv/dlv)
 ```
- 
+
+## Demo
+
+Refer to `/demo/DEMO_README.txt` for usage examples.
+
 ## Known limitations 
 
 - Input ontologies have to be in EL: currently, no check is applied on the input OWL profile.
             
-- Input ontology has to import (owl:import) the schema for ELc primitives (provided in `/schemas/elc.n3`).
+- Input ontology has to import (`owl:import`) the schema for ELc primitives (provided in `/schemas/elc-schema.n3`).
       
 - Input ontologies have to be valid OWL ontologies: as an effect, all of the used symbols (classes and properties) have to be specified.
