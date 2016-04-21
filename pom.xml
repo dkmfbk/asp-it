@@ -7,7 +7,7 @@
   
   <groupId>eu.fbk.dkm.aspit</groupId>
   <artifactId>asp-it</artifactId>
-  <version>1.0</version>
+  <version>1.0.1</version>
 
   <name>Asp-IT</name>
   <description>ASP based information terms generator for ELc</description>

@@ -95,6 +95,10 @@
                                                     
                                                     rdfs:subClassOf [ rdf:type owl:Restriction ;
                                                                       owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
+                                                                      owl:someValuesFrom <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
+                                                                    ] ,
+                                                                    [ rdf:type owl:Restriction ;
+                                                                      owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
                                                                       owl:someValuesFrom [ rdf:type owl:Class ;
                                                                                            owl:intersectionOf ( <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
                                                                                                                 [ rdf:type owl:Restriction ;
@@ -103,10 +107,6 @@
                                                                                                                 ]
                                                                                                               )
                                                                                          ]
-                                                                    ] ,
-                                                                    [ rdf:type owl:Restriction ;
-                                                                      owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
-                                                                      owl:someValuesFrom <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
                                                                     ] .
 [ rdf:type owl:Axiom ;
   <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"fish\", [\"white\", tt]]"^^xsd:string ,
@@ -188,15 +188,15 @@
                                                     <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> <http://dkm.fbk.eu/asp-it/food-and-wines-demo#white> .
 [ rdf:type owl:Axiom ;
   <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
-  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#fish> ;
-  owl:annotatedProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
-  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#white>
-] .
-[ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Food> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#fish> ;
   owl:annotatedProperty rdf:type
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#fish> ;
+  owl:annotatedProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#white>
 ] .
 
 
@@ -237,15 +237,15 @@
 ] .
 [ rdf:type owl:Axiom ;
   <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
-  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color> ;
-  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#red> ;
-  owl:annotatedProperty rdf:type
-] .
-[ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#isColorOf> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#red> ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#teroldego>
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#red> ;
+  owl:annotatedProperty rdf:type
 ] .
 
 

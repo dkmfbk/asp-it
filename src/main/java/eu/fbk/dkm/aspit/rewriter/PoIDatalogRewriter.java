@@ -84,9 +84,9 @@ OWLEntityVisitor{
 			ax.accept(this);
 		}
 		
-		//for (OWLNamedIndividual i : ontology.getIndividualsInSignature()) {
-		//	i.accept(this);
-		//}
+		for (OWLNamedIndividual i : ontology.getIndividualsInSignature()) {
+			i.accept(this);
+		}
 
 		//for (OWLObjectProperty p : ontology.getObjectPropertiesInSignature()) {
 		//	p.accept(this);
@@ -124,25 +124,25 @@ OWLEntityVisitor{
 			
 				//add is_it(tt, c, Ltop) :- is(c, top).
 				addStringRules("is_it("+ TT +", X,\""  + label + "\") :- "
-						      +"is(X," + TOP + ").\n");
+						      +"is(X,\"" + TOP + "\").\n");
 
 				//add is(c, top) :- is(c, Ltop).
-				addStringRules("is(X," + TOP + ") :- "
+				addStringRules("is(X,\"" + TOP + "\") :- "
 						      +"is(X,\""  + label + "\").\n");
 				
 			} else {//c in NI
 				IRI individualIRI = individual.asOWLNamedIndividual().getIRI(); 
 			
 				if(isaxiom){				
-					addStringRules("is(\"" + individualIRI.getFragment() + "\"," + TOP + ").\n");					
+					addStringRules("is(\"" + individualIRI.getFragment() + "\",\"" + TOP + "\").\n");					
 				}
 				//add is_it(tt, c, Ltop) :- is(c, top).
 				addStringRules("is_it(" + TT + ", \"" + individualIRI.getFragment() + "\", \"" 
 						+ label + "\") :- is(\"" 
-						+ individualIRI.getFragment() + "\", " + TOP + ").\n");
+						+ individualIRI.getFragment() + "\", \"" + TOP + "\").\n");
 				
 				//add is(c, top) :- is(c, Ltop).
-				addStringRules("is(\"" + individualIRI.getFragment() + "\", " + TOP + ") :- is(\"" 
+				addStringRules("is(\"" + individualIRI.getFragment() + "\", \"" + TOP + "\") :- is(\"" 
 						+ individualIRI.getFragment() + "\", \"" 
 						+ label + "\").\n");				
 			}
@@ -355,20 +355,21 @@ OWLEntityVisitor{
 		OWLClassExpression subClass = axiom.getSubClass();
 		OWLClassExpression superClass = axiom.getSuperClass();
 		
-		//System.out.println("SubClass: " + axiom);
-				
-		IRI gen = subClass.asOWLClass().getIRI(); 
+		//System.out.println("SubClass: " + axiom);		
+		String gen = subClass.asOWLClass().getIRI().getFragment(); 
+		if(subClass.isOWLThing())
+			gen = TOP.toString();
 		
 		//rewrites complex concept for superclass
 		IRI labelA = rewriteConcept(false, null, superClass); //*!*
 
 		//add is(X, LA) :- is(X, g).
 		addStringRules("is(X, \"" + labelA + "\") :- "
-		               +"is(X, \"" + gen.getFragment() + "\").\n");
+		               +"is(X, \"" + gen + "\").\n");
 		
 		//add isa_it([X,Y], g, LA) :- is(X, g), is_it(Y, X, LA).
-		addStringRules("isa_it([X,Y], \"" + gen.getFragment() + "\", \"" + labelA + "\") :- "
-		               +"is(X, \"" + gen.getFragment() + "\"), "
+		addStringRules("isa_it([X,Y], \"" + gen + "\", \"" + labelA + "\") :- "
+		               +"is(X, \"" + gen + "\"), "
                        +"is_it(Y, X, \"" + labelA + "\").\n");
 		
 		if(labelA != null){
@@ -378,7 +379,7 @@ OWLEntityVisitor{
 		
 			//poi.setPredicate(PoIRewritingVocabulary.INST.getName());
 			poi.setPredicate("isa_it");
-			poi.addArgument(gen.getFragment());
+			poi.addArgument(gen);
 			poi.addArgument(labelA.toString()); //*!*
 	
 			inputKB.getPOIs().add(poi);
@@ -390,7 +391,15 @@ OWLEntityVisitor{
 	//- - RBOX AXIOMS - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 		
 	//- - SIGNATURE - - - - - - - - - - - - - - - - - - - - - - - -	
+	
+	@Override
+	//a \in \N
+	public void visit(OWLNamedIndividual individual) {
 		
+		//add is(a, \top).
+		addStringRules("is(\"" + individual.getIRI().getFragment() + "\",\"" + TOP + "\").\n");				
+	}
+	
 	//- - NOT TREATED - - - - - - - - - - - - - - - - - - - - - - - 
 		
 	@Override
@@ -403,10 +412,6 @@ OWLEntityVisitor{
 
 	@Override
 	public void visit(OWLDataProperty arg0) {
-	}
-
-	@Override
-	public void visit(OWLNamedIndividual individual) {
 	}
 	
 	@Override

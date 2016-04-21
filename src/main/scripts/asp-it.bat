@@ -1,1 +1,1 @@
-java -jar ./lib/asp-it-1.0.jar %*
+java -jar ./lib/asp-it-1.0.1.jar %*

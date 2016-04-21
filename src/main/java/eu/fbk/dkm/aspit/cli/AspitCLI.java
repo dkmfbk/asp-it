@@ -246,7 +246,7 @@ public class AspitCLI {
 	 * Prints initial banner and version.
 	 */
 	void printBanner(){
-		String banner = "=== Asp-it v.1.0 (ELc) ===\n";
+		String banner = "=== Asp-it v.1.0.1 (ELc) ===\n";
 		System.out.println(banner);
 	}
 	
