@@ -26,7 +26,7 @@ import eu.fbk.dkm.aspit.rewriter.PoIDatalogRewriter;
 
 /**
  * @author Loris
- * @version 1.0
+ * @version 1.1
  * 
  * Represents the program generated in the DLP translation. 
  * Contains methods to generate the program, compute its resulting IT 
@@ -48,6 +48,10 @@ public class KBProgram {
 	private long modelComputationTime; //time in milliseconds for the DLV model computation
 	
 	private int infotermsNumber; //Number of computed information terms
+	
+	private boolean fillergen = false;//Use filler generation method.
+	
+	private int modelslimit = 0;//Limits the number of computed models 
 	
 	//--- CONSTRUCTOR ------------------------------------------
 
@@ -114,6 +118,13 @@ public class KBProgram {
 	public void setDlvPath(String dlvPath) {
 		this.dlvPath = dlvPath;
 	}
+
+	/**
+	 * @param dlvPath the dlvPath to set
+	 */
+	public void setModelsNumber(int modnum) {
+		this.modelslimit = modnum;
+	}
 	
 	//--- REWRITING ---------------------------------------------
 	
@@ -124,6 +135,8 @@ public class KBProgram {
 				
 		PoIDatalogRewriter rewriter = new PoIDatalogRewriter();
 		rewriter.setKnowledgeBase(inputKB);
+		
+		if(fillergen) rewriter.setFillergenRew();
 
 		long startTime = System.currentTimeMillis();
 		
@@ -135,6 +148,13 @@ public class KBProgram {
 		
 		programString = rewriter.getProgramString();
 		//System.out.println("Rewriting program complete.");
+	}
+
+	/**
+	 * Use filler generation method for rewriting.
+	 * */
+	public void setFillergenMethod(){
+		fillergen = true;
 	}
 	
 	//--- SEARCH IN POIs ------------------------------------------
@@ -196,6 +216,9 @@ public class KBProgram {
 			
 			//NOFINITECHECK needed to use list terms.
 			invocation.addOption("-nofinitecheck");
+			
+			//Limit to the number of computed models.
+			invocation.addOption("-n=" + modelslimit);
 			
 			//List of computed models, used to check at least a model is computed.
 			final List<Model> models = new ArrayList<Model>();

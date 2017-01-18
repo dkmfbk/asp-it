@@ -2,6 +2,9 @@
   Asp-it - CHANGELOG
 ##############################
 
+* v.1.1.:
+- Added alternative rewriting for filler generation.
+
 * v.1.0.:
 - Complete prototype for EL formulas
 

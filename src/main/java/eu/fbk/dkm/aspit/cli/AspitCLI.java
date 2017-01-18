@@ -13,7 +13,7 @@ import eu.fbk.dkm.aspit.kb.KnowledgeBase;
 
 /** 
  * @author Loris 
- * @version 1.0
+ * @version 1.1
  * 
  * Command line interface for Asp-it (for ELc).
  */
@@ -30,9 +30,11 @@ public class AspitCLI {
 	private String dlvPath = null;
 	private String outputKBFilePath = null;
 	private String outputDLPFilePath = null;
+	private int modnum = 0;
 	
 	private boolean verbose = false;
-
+	private boolean fillergen = false;
+	
 	private String[] args;
 
 	//--- CONSTRUCTOR ------------------------------------------
@@ -92,6 +94,19 @@ public class AspitCLI {
 
 		if(outputDLPFilePath != null)
 			outputKBProgram.setOutputFilePath(outputDLPFilePath);
+		
+		//Choose rewriting method.
+		if(fillergen){
+			outputKBProgram.setFillergenMethod();
+			
+			if(verbose) System.out.println("Using filler generation rewriting.");
+		}
+		
+		if(modnum > 0){
+			outputKBProgram.setModelsNumber(modnum);
+			
+			if(verbose) System.out.println("Compute at most " + modnum + " models.");
+		}
 		
 		//Rewrite the program.
 		if(verbose) System.out.println("Rewriting program...");
@@ -177,6 +192,14 @@ public class AspitCLI {
 			
 			for (int i = 1; i < args.length; i++) {				
 				switch (args[i]) {
+				case "-n":
+					if(i+1 < args.length && !args[i+1].startsWith("-") && args[i+1].matches("\\d+"))
+						modnum = Integer.parseInt(args[++i]);
+					else {
+						System.err.println("[!] Missing argument: <mod-number>");						
+						return false;
+					}						
+					break;				
 				case "-dlv":
 					if(i+1 < args.length && !args[i+1].startsWith("-"))
 						dlvPath = args[++i];
@@ -204,6 +227,9 @@ public class AspitCLI {
 				case "-v":
 				    verbose = true;
 					break;
+				case "-f":
+				    fillergen = true;
+					break;					
 				default://arguments not supported
 					System.err.println("[!] Option not supported: " + args[i]);
 					System.err.println();
@@ -230,14 +256,18 @@ public class AspitCLI {
 				"Example: asp-it input.n3\n\n"
 				+ //
 				"Options:\n"
-				+ //
+				+ //				
 				" -v: verbose (prints more information about loading and computing process)\n"
 				+ //
 				" -out <output-file>: specifies the path to the output ontology file (default: <input-ontology-file>-out.n3)\n"
 				+ //
 				" -lp <program-file>: output the result of rewriting to the specified file (default: false)\n"
 				+ //
-		        " -dlv <dlv-path>: specifies the path to the DLV executable (default: localdlv/dlv)";
+		        " -dlv <dlv-path>: specifies the path to the DLV executable (default: localdlv/dlv)\n\n"
+				+ //
+				" -f: use alternative translation with fillers generation\n"
+				+ //				
+				" -n <mod-number>: computes at most <mod-number> answer sets (default: 0 = all models)";
 
 		System.out.println(usage);
 	}
@@ -246,7 +276,7 @@ public class AspitCLI {
 	 * Prints initial banner and version.
 	 */
 	void printBanner(){
-		String banner = "=== Asp-it v.1.0.1 (ELc) ===\n";
+		String banner = "=== Asp-it v.1.1 (ELc) ===\n";
 		System.out.println(banner);
 	}
 	
@@ -267,7 +297,11 @@ public class AspitCLI {
 		//String[] argtest = {"./examples/complex-concepts.n3", "-v", "-lp", "./output.dlv"};
 		//String[] argtest = {"./examples/isa-test.n3", "-v", "-lp", "./output.dlv"};
 		//String[] argtest = {"./examples/food-and-wines-demo.n3", "-v", "-lp", "./output.dlv"};
-						
+		
+		//String[] argtest = {"./examples/complex-concepts.n3", "-v", "-f", "-lp", "./output.dlv"};
+		//String[] argtest = {"./examples/isa-test.n3", "-v", "-f", "-lp", "./output.dlv"};
+		//String[] argtest = {"./examples/food-and-wines-demo.n3", "-v", "-f", "-lp", "./output.dlv", "-n", "100"};
+		
 		//new AspitCLI(argtest).go();
 	}
 	

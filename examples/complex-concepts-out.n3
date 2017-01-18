@@ -96,15 +96,15 @@
                                                <http://dkm.fbk.eu/asp-it/complex-concepts#R> <http://dkm.fbk.eu/asp-it/complex-concepts#i2> .
 [ rdf:type owl:Axiom ;
   <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
-  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#A> ;
-  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i1> ;
-  owl:annotatedProperty rdf:type
-] .
-[ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedProperty <http://dkm.fbk.eu/asp-it/complex-concepts#R> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i1> ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#i2>
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/complex-concepts#A> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i1> ;
+  owl:annotatedProperty rdf:type
 ] .
 
 
@@ -172,7 +172,12 @@
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i5>
 ] .
 [ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"i1\", tt]"^^xsd:string ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"i1\", tt]"^^xsd:string ,
+                                              "[\"i2\", tt]"^^xsd:string ,
+                                              "[\"i3\", tt]"^^xsd:string ,
+                                              "[\"i4\", tt]"^^xsd:string ,
+                                              "[\"i5\", tt]"^^xsd:string ,
+                                              "[\"i6\", tt]"^^xsd:string ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/complex-concepts#i5> ;
   owl:annotatedProperty rdf:type ;
   owl:annotatedTarget [ rdf:type owl:Restriction ;

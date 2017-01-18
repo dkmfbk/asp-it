@@ -12,7 +12,7 @@ work. Please contact the authors for any other need.*
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 = INSTALLATION =
 
-The latest binary release of Asp-it (1.0.1) can be found at 
+The latest binary release of Asp-it (1.1) can be found at 
 (https://dkm.fbk.eu/resources/asp-it/asp-it.zip).  
 See also Asp-it GitHub releases page (https://github.com/dkmfbk/asp-it/releases) 
 for current and previous releases.  
@@ -49,6 +49,10 @@ Options:
                      (default: false)
  -dlv <dlv-path>   : specifies the path to the DLV executable 
                      (default: localdlv/dlv)
+                     
+ -f: use alternative translation with fillers generation
+ -n <mod-number>: computes at most <mod-number> answer sets 
+                  (default: 0 = all models)                     
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 = DEMO =

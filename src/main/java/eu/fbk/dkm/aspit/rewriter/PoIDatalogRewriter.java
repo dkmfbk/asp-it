@@ -27,7 +27,7 @@ import eu.fbk.dkm.aspit.kb.PieceOfInformation;
 
 /**
  * @author Loris
- * @version 1.0
+ * @version 1.1
  * 
  * Encodes the translation to Datalog for the PoIs of input ontology.
  * 
@@ -42,6 +42,8 @@ OWLEntityVisitor{
 			
 	private int labelnum;
 	private String rulesString;
+	
+	private boolean fillergen;
 
     //--- CONSTRUCTORS ----------------------------------------------------------
     
@@ -49,12 +51,17 @@ OWLEntityVisitor{
     	
     	this.labelnum = 0;
     	this.rulesString = "";
+    	this.fillergen = false;
    	}
     
 	//--- SET METHODS -----------------------------------------------------
         
     public void setKnowledgeBase(KnowledgeBase kb){
     	this.inputKB = kb;
+    }    
+    
+    public void setFillergenRew(){
+    	this.fillergen = true;
     }    
     	
 	//--- GET METHODS -----------------------------------------------------
@@ -250,15 +257,46 @@ OWLEntityVisitor{
 			
 			if(individual == null){//c in Var
 				
-				//add is_it([X,Y], c, LC) :- rel_it(tt, c, r, X), is_it(Y, X, LA).
+				//add is_it([X,Y], c, LC) :- rel(c, r, X), is_it(Y, X, LA).
 				addStringRules("is_it([X,Y], Z, \"" + label + "\") :- "
-				               +"rel_it("+ TT + ", Z, \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
+				               +"rel(Z, \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
 	                           +"is_it(Y, X, \"" + labelA + "\").\n");
 				
-				//add is(X,LA) :- rel(c,r,X),is(c,LC).
-				addStringRules("is(X, \"" + labelA + "\") :- "
+				if(fillergen){//Filler gen. rewriting
+					
+					//add fills(x, c, LC) v -fills(x, c, LC) :- nom(x), is(c,LC).					
+					addStringRules("fills(X, Z, \"" + label + "\") v -fills(X, Z, \"" + label + "\") :- "
+			                +"nom(X), "
+                            +"is(Z, \"" + label + "\").\n");
+					
+					//add is(x, LA) :- fills(x, c, lC).
+					addStringRules("is(X, \"" + labelA + "\") :- "
+			                +"fills(X, Z, \"" + label + "\").\n");
+					
+					//add rel(c, R, x) :- fills(x, c, lC).
+					addStringRules("rel(Z, \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment()
+							           + "\", X) :- "
+			                +"fills(X, Z, \"" + label + "\").\n");
+					
+					//add :- fills(x, c, lC), fills(y, c, lC), y != x.
+					addStringRules(":- fills(X, Z, \"" + label + "\"),"+
+							          "fills(Y, Z, \"" + label + "\"), Y != X.\n");
+					
+					//add exfill(c, lC) :- fills(x, c, lC).
+					addStringRules("exfill(Z,\"" + label + "\") :- fills(X, Z,\"" + label + "\").\n");
+					
+					//add :- is(c, lC) not exfill(c, lC).
+					addStringRules(":- is(Z, \"" + label + "\"), not exfill(Z,\"" + label + "\").\n");
+					
+					//XXX: #######################					
+					
+				} else {//normal rewriting
+				
+					//add is(X,LA) :- rel(c,r,X),is(c,LC).
+					addStringRules("is(X, \"" + labelA + "\") :- "
 			                  +"rel(Z, \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
-                              +"is(Z, \"" + label + "\").\n");								
+                              +"is(Z, \"" + label + "\").\n");
+				}
 				
 			} else {//c in NI
 				IRI individualIRI = individual.asOWLNamedIndividual().getIRI(); 
@@ -270,13 +308,44 @@ OWLEntityVisitor{
 				}				
 				//add is_it([X,Y], c, LC) :- rel_it(tt, c, r, X), is_it(Y, X, LA).
 				addStringRules("is_it([X,Y], \"" + individualIRI.getFragment() + "\", \"" + label + "\") :- "
-				               +"rel_it(" + TT + ", \"" + individualIRI.getFragment() + "\", \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
+				               +"rel(\"" + individualIRI.getFragment() + "\", \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
 	                           +"is_it(Y, X, \"" + labelA + "\").\n");
 				
-				//add is(X,LA) :- rel(c,r,X),is(c,LC).
-				addStringRules("is(X, \"" + labelA + "\") :- "
+				if(fillergen){//Filler gen. rewriting
+					
+					//add fills(x, c, LC) v -fills(x, c, LC) :- nom(x), is(c,LC).					
+					addStringRules("fills(X, \"" + individualIRI.getFragment() + "\", \"" + label + "\") v -fills(X, \"" + individualIRI.getFragment() + "\", \"" + label + "\") :- "
+			                +"nom(X), "
+                            +"is(\"" + individualIRI.getFragment() + "\", \"" + label + "\").\n");
+					
+					//add is(x, LA) :- fills(x, c, lC).
+					addStringRules("is(X, \"" + labelA + "\") :- "
+			                +"fills(X, \"" + individualIRI.getFragment() + "\", \"" + label + "\").\n");
+					
+					//add rel(c, R, x) :- fills(x, c, lC).
+					addStringRules("rel(\"" + individualIRI.getFragment() + "\", \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment()
+							           + "\", X) :- "
+			                +"fills(X, \"" + individualIRI.getFragment() + "\", \"" + label + "\").\n");
+					
+					//add :- fills(x, c, lC), fills(y, c, lC), y != x.
+					addStringRules(":- fills(X, \"" + individualIRI.getFragment() + "\", \"" + label + "\"),"+
+							          "fills(Y, \"" + individualIRI.getFragment() + "\", \"" + label + "\"), Y != X.\n");
+					
+					//add exfill(c, lC) :- fills(x, c, lC).
+					addStringRules("exfill(\"" + individualIRI.getFragment() + "\",\"" + label + "\") :- fills(X, \"" + individualIRI.getFragment() + "\",\"" + label + "\").\n");
+					
+					//add :- is(c, lC) not exfill(c, lC).
+					addStringRules(":- is(\"" + individualIRI.getFragment() + "\", \"" + label + "\"), not exfill(\"" + individualIRI.getFragment() + "\",\"" + label + "\").\n");
+
+					//XXX: #######################
+
+				} else {//normal rewriting
+									
+					//add is(X,LA) :- rel(c,r,X),is(c,LC).
+					addStringRules("is(X, \"" + labelA + "\") :- "
 			                  +"rel(\"" + individualIRI.getFragment() + "\", \"" + some.getProperty().asOWLObjectProperty().getIRI().getFragment() + "\", X), "
-                              +"is(\"" + individualIRI.getFragment() + "\", \"" + label + "\").\n");				
+                              +"is(\"" + individualIRI.getFragment() + "\", \"" + label + "\").\n");
+				}
 			}			
 			return label;			
 		}
@@ -398,6 +467,10 @@ OWLEntityVisitor{
 		
 		//add is(a, \top).
 		addStringRules("is(\"" + individual.getIRI().getFragment() + "\",\"" + TOP + "\").\n");				
+
+		//add nom(a).
+		if(fillergen)
+		   addStringRules("nom(\"" + individual.getIRI().getFragment() + "\").\n");				
 	}
 	
 	//- - NOT TREATED - - - - - - - - - - - - - - - - - - - - - - - 

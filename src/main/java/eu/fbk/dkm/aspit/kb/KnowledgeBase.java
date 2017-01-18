@@ -20,7 +20,7 @@ import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
 /**
  * @author Loris
- * @version 1.0
+ * @version 1.1
  * 
  * Represents the working ontology for which information terms are computed. 
  */

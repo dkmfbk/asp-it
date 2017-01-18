@@ -76,9 +76,34 @@
                                                                        owl:someValuesFrom <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Wine>
                                                                      ] .
 [ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"red\", [\"barolo\", tt]]"^^xsd:string ,
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"barolo\", [\"barolo\", tt]]"^^xsd:string ,
+                                              "[\"barolo\", [\"chardonnay\", tt]]"^^xsd:string ,
+                                              "[\"barolo\", [\"fish\", tt]]"^^xsd:string ,
+                                              "[\"barolo\", [\"meat\", tt]]"^^xsd:string ,
+                                              "[\"barolo\", [\"red\", tt]]"^^xsd:string ,
+                                              "[\"barolo\", [\"teroldego\", tt]]"^^xsd:string ,
+                                              "[\"barolo\", [\"white\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"chardonnay\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"fish\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"red\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"teroldego\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", tt]]"^^xsd:string ,
+                                              "[\"red\", [\"barolo\", tt]]"^^xsd:string ,
+                                              "[\"red\", [\"chardonnay\", tt]]"^^xsd:string ,
+                                              "[\"red\", [\"fish\", tt]]"^^xsd:string ,
+                                              "[\"red\", [\"meat\", tt]]"^^xsd:string ,
+                                              "[\"red\", [\"red\", tt]]"^^xsd:string ,
                                               "[\"red\", [\"teroldego\", tt]]"^^xsd:string ,
-                                              "[\"white\", [\"chardonnay\", tt]]"^^xsd:string ;
+                                              "[\"red\", [\"white\", tt]]"^^xsd:string ,
+                                              "[\"white\", [\"barolo\", tt]]"^^xsd:string ,
+                                              "[\"white\", [\"chardonnay\", tt]]"^^xsd:string ,
+                                              "[\"white\", [\"fish\", tt]]"^^xsd:string ,
+                                              "[\"white\", [\"meat\", tt]]"^^xsd:string ,
+                                              "[\"white\", [\"red\", tt]]"^^xsd:string ,
+                                              "[\"white\", [\"teroldego\", tt]]"^^xsd:string ,
+                                              "[\"white\", [\"white\", tt]]"^^xsd:string ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color> ;
   owl:annotatedProperty rdfs:subClassOf ;
   owl:annotatedTarget [ rdf:type owl:Restriction ;
@@ -95,10 +120,6 @@
                                                     
                                                     rdfs:subClassOf [ rdf:type owl:Restriction ;
                                                                       owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
-                                                                      owl:someValuesFrom <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
-                                                                    ] ,
-                                                                    [ rdf:type owl:Restriction ;
-                                                                      owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
                                                                       owl:someValuesFrom [ rdf:type owl:Class ;
                                                                                            owl:intersectionOf ( <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
                                                                                                                 [ rdf:type owl:Restriction ;
@@ -107,21 +128,54 @@
                                                                                                                 ]
                                                                                                               )
                                                                                          ]
+                                                                    ] ,
+                                                                    [ rdf:type owl:Restriction ;
+                                                                      owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
+                                                                      owl:someValuesFrom <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
                                                                     ] .
 [ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"fish\", [\"white\", tt]]"^^xsd:string ,
-                                              "[\"meat\", [\"red\", tt]]"^^xsd:string ;
-  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Food> ;
-  owl:annotatedProperty rdfs:subClassOf ;
-  owl:annotatedTarget [ rdf:type owl:Restriction ;
-                        owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
-                        owl:someValuesFrom <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
-                      ]
-] .
-[ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"fish\", [\"white\", [tt, [\"chardonnay\", tt]]]]"^^xsd:string ,
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"fish\", [\"red\", [tt, [\"barolo\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"red\", [tt, [\"chardonnay\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"red\", [tt, [\"fish\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"red\", [tt, [\"meat\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"red\", [tt, [\"red\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"red\", [tt, [\"teroldego\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"red\", [tt, [\"white\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", [tt, [\"barolo\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", [tt, [\"chardonnay\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", [tt, [\"fish\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", [tt, [\"meat\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", [tt, [\"red\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", [tt, [\"teroldego\", tt]]]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", [tt, [\"white\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", [tt, [\"barolo\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", [tt, [\"chardonnay\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", [tt, [\"fish\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", [tt, [\"meat\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", [tt, [\"red\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", [tt, [\"teroldego\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", [tt, [\"white\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", [tt, [\"barolo\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", [tt, [\"chardonnay\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", [tt, [\"fish\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", [tt, [\"meat\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", [tt, [\"red\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", [tt, [\"teroldego\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", [tt, [\"white\", tt]]]]"^^xsd:string ,
                                               "[\"meat\", [\"red\", [tt, [\"barolo\", tt]]]]"^^xsd:string ,
-                                              "[\"meat\", [\"red\", [tt, [\"teroldego\", tt]]]]"^^xsd:string ;
+                                              "[\"meat\", [\"red\", [tt, [\"chardonnay\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"red\", [tt, [\"fish\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"red\", [tt, [\"meat\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"red\", [tt, [\"red\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"red\", [tt, [\"teroldego\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"red\", [tt, [\"white\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", [tt, [\"barolo\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", [tt, [\"chardonnay\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", [tt, [\"fish\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", [tt, [\"meat\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", [tt, [\"red\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", [tt, [\"teroldego\", tt]]]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", [tt, [\"white\", tt]]]]"^^xsd:string ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Food> ;
   owl:annotatedProperty rdfs:subClassOf ;
   owl:annotatedTarget [ rdf:type owl:Restriction ;
@@ -134,6 +188,20 @@
                                                                   ]
                                                                 )
                                            ]
+                      ]
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "[\"fish\", [\"red\", tt]]"^^xsd:string ,
+                                              "[\"fish\", [\"white\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"barolo\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"meat\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"red\", tt]]"^^xsd:string ,
+                                              "[\"meat\", [\"white\", tt]]"^^xsd:string ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Food> ;
+  owl:annotatedProperty rdfs:subClassOf ;
+  owl:annotatedTarget [ rdf:type owl:Restriction ;
+                        owl:onProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#goesWith> ;
+                        owl:someValuesFrom <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color>
                       ]
 ] .
 
@@ -231,12 +299,6 @@
                                                                                                             <http://dkm.fbk.eu/asp-it/food-and-wines-demo#teroldego> .
 [ rdf:type owl:Axiom ;
   <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
-  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#barolo> ;
-  owl:annotatedProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#isColorOf> ;
-  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#red>
-] .
-[ rdf:type owl:Axiom ;
-  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
   owl:annotatedProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#isColorOf> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#red> ;
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#teroldego>
@@ -246,6 +308,12 @@
   owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#Color> ;
   owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#red> ;
   owl:annotatedProperty rdf:type
+] .
+[ rdf:type owl:Axiom ;
+  <http://dkm.fbk.eu/asp-it/elc-schema#hasIT> "tt"^^xsd:string ;
+  owl:annotatedTarget <http://dkm.fbk.eu/asp-it/food-and-wines-demo#barolo> ;
+  owl:annotatedProperty <http://dkm.fbk.eu/asp-it/food-and-wines-demo#isColorOf> ;
+  owl:annotatedSource <http://dkm.fbk.eu/asp-it/food-and-wines-demo#red>
 ] .
 
 
